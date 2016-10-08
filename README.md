@@ -1,6 +1,8 @@
 # FSRM-ANTICRYPTO
 Protect servers against crypto attacks
 
+use FSRM-ANTICRYPTO to protect your Windows servers against Crypto attacks
+
 # Sources #
 https://github.com/kinomakino/ransomware_file_extensions/blob/master/anti_ransomware.ps1
 
