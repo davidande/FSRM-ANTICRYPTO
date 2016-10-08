@@ -13,30 +13,43 @@
 # le script doit être planifié pour se mettre à jour toutes les heures pour plus de sécurité.
 # testé sous: w2012, w2012R2 et w2016
 
-
-# VARIABLES #
-
-#Adresses mails #
-$maildestination = "administrator_mail"
-
-# Ajouter tous les volumes avec partages#
-$drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
-
-Write-Host "Protection sur ces lecteurs: $($drivesContainingShares -Join ",")"
-
-# Nom des differents groupes dans FSRM #
+###############################################
+# VARIABLES TO EDIT BEFORE USE #
+# Working directory
+$wkdir = "C:\FSRM"
+#Distination mail adress #
+$maildestination = "david.ande@wanadoo.fr"
+###############################################
+# Group Name in FSRMFSRM #
 $fileGroupName = "ALTAE_Crypto_extensions"
 $fileTemplateName = "ALTAE_Modele_Filtrage_Crypto"
 $fileScreenName = "ALTAE_Filtre_Crypto"
 #############################################
 
-# Commande a executer en cas de violation des regles # par defaut on arrete le service de partage #
+# Verifying if new crypto extensions available #
+Invoke-WebRequest https://fsrm.experiant.ca/api/v1/get -OutFile $wkdir\extensions.txt
+$taille1 = Get-FileHash $wkdir\extensions.txt
+$taille2 = Get-FileHash $wkdir\extensions.old
+if ($taille1.Hash -eq $Taille2.Hash) {
+    rm extensions.txt
+    Write-Host No New Crypto Extensions available
+    Exit
+}
+Write-Host New Crypto extensions available will be added to FSRM
+
+# Listing all shared drives#
+$drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
+
+Write-Host "Shared drives to be protected: $($drivesContainingShares -Join ",")"
+
+# Command to be lunch in case of violation of Anticrypto FSRM rules #
+# defdault rule stop lanmaserver to stop all shares
+# To restart the service use the comman "net start lanmanserver"
 $Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
 ###################################################################################################
    
-# Fonction de conversion de liste d'extensions         #
-# permet de convertir la liste d'extension téléchargée #
-# en un format compatible avec FSRM                    #
+# Fonction to convert the extensions list #
+# in a compatible FSRM format             #                       
 
 function ConvertFrom-Json20([Object] $obj)
 {
@@ -48,21 +61,29 @@ function ConvertFrom-Json20([Object] $obj)
 $webClient = New-Object System.Net.WebClient
 $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/get")
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
-$Notification = New-FsrmAction -Type Email -MailTo "$maildestination" -Subject "Alerte Cryptolocker" -Body "l'utilisateur [Source Io Owner] tente de sauvegarder [Source File Path] en [File Screen Path] sur le serveur [Server]. Ce fichier se trouve dans le groupe [Violated File Group], qui n'est pas permis sur le serveur." -RunLimitInterval 60 
+$Notification = New-FsrmAction -Type Email -MailTo "$maildestination" -Subject "Cryptolocker Alert" -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60 
 
 
-# Creation ou remplacement du groupe de fichiers #
+
+# Creating FSRM File Group#
 Remove-FsrmFileGroup -Name "$fileGroupName" -Confirm:$false
+Write-Host Creating File Group $fileGroupName
 New-FsrmFileGroup -Name "$fileGroupName" –IncludePattern $monitoredExtensions
 
-# Creation ou remplacement du modele de filtre #
+# Creating FSRM File Template #
 Remove-FsrmFileScreenTemplate -Name "$fileTemplateName" -Confirm:$false
+Write-Host Creating File Template $fileTemplateName including $fileGroupName
 New-FsrmFileScreenTemplate -Name "$fileTemplateName" -Active:$True -IncludeGroup "$fileGroupName" -Notification $Notification,$commande
 
-# Creation ou remplacement des filtres de fichiers #
+# Creating FSRM File Screen #
 foreach ($share in $drivesContainingShares) {
 Remove-FsrmFileScreen $share -Confirm:$false
 }
+Write-Host Creating File Screen $fileScreenName based on $fileTemplateName for the extensions list group $fileGroupName on drive(s) $drivesContainingShares
 foreach ($share in $drivesContainingShares) {
 New-FsrmFileScreen -Path $share -Active:$true -Description "$fileScreenName" –IncludeGroup "$filegroupname" –Template "$fileTemplateName"
 }
+rm $wkdir\extensions.old
+cp $wkdir\extensions.txt $wkdir\extensions.old
+rm $wkdir\extensions.txt
+exit
