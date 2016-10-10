@@ -4,14 +4,12 @@
 # WWW.ALTAE.NET             #
 # 07/10/2016                #
 #  V1.0                     #
+# GNU GENERAL PUBLIC LICENSE#
 #############################
 
-# Le principe est d'utiliser une liste d'extensions crypto mise à jour par la communauté en temps réel
-# et de configurer le service FSRM de manière à interdire l'écriture de fichiers contenant ces extensions.
-# Par défaut si une violation est constatée, un mail est envoyé à l'administrateur
-# et le service de partage est stoppé.
-# le script doit être planifié pour se mettre à jour toutes les heures pour plus de sécurité.
-# testé sous: w2012, w2012R2 et w2016
+# Using FSRM to Block users writing file with a forbiden extension.
+# This scripts can be add as a task : programme: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
+# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is majcrypto.ps1 
 
 ###############################################
 # VARIABLES TO EDIT BEFORE USE #
@@ -20,9 +18,9 @@ $wkdir = "C:\FSRM"
 #Distination mail adress #
 $maildestination = "XXXXXX@XXX.XX"
 ###############################################
-# Group Name in FSRMFSRM #
+# Group Name in FSRM #
 $fileGroupName = "ALTAE_Crypto_extensions"
-$fileTemplateName = "ALTAE_Modele_Filtrage_Crypto"
+$fileTemplateName = "ALTAE_Template_Crypto"
 $fileScreenName = "ALTAE_Filtre_Crypto"
 #############################################
 
@@ -36,14 +34,14 @@ if ($taille1.Hash -eq $Taille2.Hash) {
     Exit
 }
 Write-Host New Crypto extensions available will be added to FSRM
-
 # Listing all shared drives#
 $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
-
 Write-Host "Shared drives to be protected: $($drivesContainingShares -Join ",")"
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
-# defdault rule stop lanmaserver to stop all shares
+# defdault rule is non but You can use this one by adding 
+# $Command to the notification in the Template
+# This command stop lanmaserver to stop all shares
 # To restart the service use the comman "net start lanmanserver"
 $Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
 ###################################################################################################
