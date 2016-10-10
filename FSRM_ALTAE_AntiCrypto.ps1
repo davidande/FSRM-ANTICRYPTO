@@ -14,7 +14,7 @@
 ###############################################
 # VARIABLES TO EDIT BEFORE USE #
 # Working directory
-$wkdir = "C:\FSRM"
+$wkdir = "C:\FSRMANTICRYPTO"
 #Distination mail adress #
 $maildestination = "XXXXXX@XXX.XX"
 ###############################################
