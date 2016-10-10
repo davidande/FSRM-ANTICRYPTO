@@ -8,8 +8,8 @@
 #############################
 
 # Using FSRM to Block users writing file with a forbiden extension.
-# This scripts can be add as a task : programme: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is majcrypto.ps1 
+# This scripts can be add as a task to check newer version of extensions list : programme: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
+# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMANTICRYPTO\FSRM_ALTAE_AntiCrypto.ps1
 # Before using this script, You have to install FSRM
 # Add Role -> File Services/File Server Ressource Manager
 # Lunch FSRM.MSC and Right Click on File Server Ressource Manager to configure Mail notification Settings
@@ -65,7 +65,7 @@ $webClient = New-Object System.Net.WebClient
 $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/get")
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $MailNotification = New-FsrmAction -Type Email -MailTo "$maildestination" -Subject "Cryptolocker Alert" -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60 
-$EventNotification = New-FsrmAction -Type Event -EvenType Warning -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60
+$EventNotification = New-FsrmAction -Type Event -EventType Warning -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60
 
 
 # Creating FSRM File Group#
@@ -84,7 +84,7 @@ New-FsrmFileScreenTemplate -Name "$fileTemplateName" -Active:$True -IncludeGroup
 foreach ($share in $drivesContainingShares) {
 Remove-FsrmFileScreen $share -Confirm:$false
 }
-Write-Host Creating File Screen $fileScreenName based on $fileTemplateName for the extensions list group $fileGroupName on drive(s) $drivesContainingShares
+Write-Host Creating File Screen $fileScreenName based on $fileTemplateName for the extensions list group $fileGroupName on drives $drivesContainingShares
 foreach ($share in $drivesContainingShares) {
 New-FsrmFileScreen -Path $share -Active:$true -Description "$fileScreenName" –IncludeGroup "$filegroupname" –Template "$fileTemplateName"
 }
