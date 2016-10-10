@@ -1,7 +1,12 @@
 # FSRM-ANTICRYPTO
 Protect servers against crypto attacks
 
-use FSRM-ANTICRYPTO to protect your Windows servers against Crypto attacks
+use FSRM-ANTICRYPTO to protect your Windows servers against Crypto attacks and keep the Crypto filegroup extensions up to date
+
+# Howto Use #
+Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
+
+Download the 
 
 # Sources #
 https://github.com/kinomakino/ransomware_file_extensions/blob/master/anti_ransomware.ps1
