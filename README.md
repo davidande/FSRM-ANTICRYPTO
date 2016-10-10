@@ -15,6 +15,11 @@ C:\FSRMANTICRYPTO contain
 - extensions.old -> used by FSRM_ALTAE_2016.ps1 to compare local en remote extensions list
 - Readme.md -> this file
 
+3- Execute the script
+Start the script in a Powershell session with admin right.
+First time You should see some errors. No problem it's only cause by deleting objects that are not yet created.
+To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error
+
 3- Task to update de file
 This scripts can be add as a task to check newer version of extensions list : 
 program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
