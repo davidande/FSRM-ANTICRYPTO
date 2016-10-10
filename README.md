@@ -2,7 +2,9 @@
 Protect servers against crypto attacks
 
 Use FSRM-ANTICRYPTO to protect your Windows servers against Crypto attacks and keep the Crypto filegroup extensions up to date.
-A very completelist is maintained by experiant.ca with infos gave by the community. Check-it at https://fsrm.experiant.ca
+A very completelist is maintained by experiant.ca with infos gave by the community. Check-it at https://fsrm.experiant.ca.
+Configuring FSRM make impossible to users to write files with forbiden extensions. So We use FSRM to avoid encrypted files to be saved as the extension used by the Crypto Process is Known.
+Those scripts and howto are given as is. Use at your own risck. I will take no responsability for that.
 
 # Howto Use #
 1-Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
