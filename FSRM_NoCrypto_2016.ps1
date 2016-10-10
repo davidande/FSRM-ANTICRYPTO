@@ -33,7 +33,7 @@ $taille1 = Get-FileHash $wkdir\extensions.txt
 $taille2 = Get-FileHash $wkdir\extensions.old
 if ($taille1.Hash -eq $Taille2.Hash) {
     Write-Host No New Crypto Extensions available
-    rm extensions.txt
+    rm $wkdir\extensions.txt
     Exit
 }
 Write-Host New Crypto extensions available will be added to FSRM
