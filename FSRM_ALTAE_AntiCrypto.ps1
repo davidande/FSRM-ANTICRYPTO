@@ -18,7 +18,7 @@
 # Working directory
 $wkdir = "C:\FSRM"
 #Distination mail adress #
-$maildestination = "david.ande@wanadoo.fr"
+$maildestination = "XXXXXX@XXX.XX"
 ###############################################
 # Group Name in FSRMFSRM #
 $fileGroupName = "ALTAE_Crypto_extensions"
@@ -71,9 +71,11 @@ Write-Host Creating File Group $fileGroupName
 New-FsrmFileGroup -Name "$fileGroupName" –IncludePattern $monitoredExtensions
 
 # Creating FSRM File Template #
+# You Can modify the Notification to add the command to execute in case of violation
+#    -Notification $Notification,$commande    that will add $Commande to be started
 Remove-FsrmFileScreenTemplate -Name "$fileTemplateName" -Confirm:$false
 Write-Host Creating File Template $fileTemplateName including $fileGroupName
-New-FsrmFileScreenTemplate -Name "$fileTemplateName" -Active:$True -IncludeGroup "$fileGroupName" -Notification $Notification,$commande
+New-FsrmFileScreenTemplate -Name "$fileTemplateName" -Active:$True -IncludeGroup "$fileGroupName" -Notification $Notification
 
 # Creating FSRM File Screen #
 foreach ($share in $drivesContainingShares) {
