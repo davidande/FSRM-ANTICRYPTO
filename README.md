@@ -8,13 +8,12 @@ Those scripts and howto are given as is. Use at your own risck. I will take no r
 This work is heavily based on Kinokino and Nexxai on Github. Big hug!
 Thanks to Jpelectron who gave me the idea to go further.
 
-# Howto Use #
+# Howto Use 
 1-Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
 As sometime Windows file manager is configured in Case sensitive, you have to
 configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel obcaseinsensitive is set to 1
 
-2-Download the FSRMNOCRYPTO.ZIP and UnZip it to C:\
-C:\FSRMNOCRYPTO contain:
+2-Download the FSRMNOCRYPTO.ZIP and UnZip it to C:\ so C:\FSRMNOCRYPTO contain:
 - FSRM_NoCrypto_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2
 - FSRM_NoCrypto_2016.ps1 -> to be used with Windows Server 2012, 2012 R2 and 2016
 - extensions.old -> used by FSRM_ALTAE_2016.ps1 to compare local en remote extensions list
