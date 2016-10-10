@@ -21,28 +21,29 @@
 # VARIABLES TO EDIT BEFORE USE #
 # Working directory
 $wkdir = "C:\FSRMANTICRYPTO"
-#Distination mail adress #
-$maildestination = "XXXXXX@XXX.XX"
-###############################################
+
 # Group Name in FSRM #
-$fileGroupName = "ALTAE_Crypto_extensions"
-$fileTemplateName = "ALTAE_Template_Crypto"
-$fileScreenName = "ALTAE_Filtre_Crypto"
+$fileGroupName = "ALTAE_CryptoBlocker_extensions"
+$fileTemplateName = "ALTAE_TemplateBlocker_Crypto"
+$fileScreenName = "ALTAE_FiltreBlocker_Crypto"
 #############################################
 
 # Verifying if new crypto extensions available #
 Invoke-WebRequest https://fsrm.experiant.ca/api/v1/get -OutFile $wkdir\extensions.txt
+
 $taille1 = Get-FileHash $wkdir\extensions.txt
 $taille2 = Get-FileHash $wkdir\extensions.old
 if ($taille1.Hash -eq $Taille2.Hash) {
-    rm extensions.txt
     Write-Host No New Crypto Extensions available
+    rm extensions.txt
     Exit
 }
 Write-Host New Crypto extensions available will be added to FSRM
+
 # Listing all shared drives#
-$drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
-Write-Host "Shared drives to be protected: $($drivesContainingShares -Join ",")"
+$drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -match  '0|2147483648' } | Select -ExpandProperty Path | Select -Unique
+# $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
+Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
 # defdault rule is non but You can use this one by adding 
@@ -66,7 +67,14 @@ function ConvertFrom-Json20([Object] $obj)
 $webClient = New-Object System.Net.WebClient
 $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/get")
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
+
+# Destination mail adress Modify if You use mail notification
+# in the case of Mail Notification check your SMTP setting in the FSRM Options
+$maildestination = "XXXXXX@XXX.XX"
+
 $MailNotification = New-FsrmAction -Type Email -MailTo "$maildestination" -Subject "Cryptolocker Alert" -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60 
+###############################################
+
 $EventNotification = New-FsrmAction -Type Event -EventType Warning -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60
 
 
@@ -93,4 +101,4 @@ New-FsrmFileScreen -Path $share -Active:$true -Description "$fileScreenName" –
 rm $wkdir\extensions.old
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
-exit
+Exit
