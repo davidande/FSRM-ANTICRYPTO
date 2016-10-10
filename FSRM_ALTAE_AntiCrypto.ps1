@@ -10,6 +10,8 @@
 # Using FSRM to Block users writing file with a forbiden extension.
 # This scripts can be add as a task : programme: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
 # Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is majcrypto.ps1 
+# Before using this script, You have to install FSRM
+# Add Role -> File Services/File Server Ressource Manager
 
 ###############################################
 # VARIABLES TO EDIT BEFORE USE #
