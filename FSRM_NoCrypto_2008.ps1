@@ -16,6 +16,8 @@
 # Click on Send a test mail to check settings working and validate
 
 ################################ Functions ################################
+########## VARIABLE TO MODIFY #############
+$wkdir = "C:\FSRMANTICRYPTO"
 
 function ConvertFrom-Json20([Object] $obj)
 {
@@ -102,10 +104,10 @@ ForEach ($group in $fileGroups) {
 
 Write-Host "Adding/replacing File Screen Template [$fileTemplateName] with Event Notification [notification.cfg] and Command Notification [$cmdConfFilename].."
 &filescrn.exe Template Delete /Template:$fileTemplateName /Quiet
-rm notification.cfg
+rm "$wkdir\notification.cfg"
 New-Item notification.cfg -type file
-Add-Content notification.cfg "Notification=e"
-Add-Content notification.cfg "`nRunLimitInterval=30"
+Add-Content "$wkdir\notification.cfg" "Notification=e"
+Add-Content "$wkdir\notification.cfg" "`nRunLimitInterval=30"
 Add-Content notification.cfg "`nMessage=User [Source Io Owner] attempted to save [Source File Path] to [File Screen Path] on the [Server] server. This file is in the [Violated File Group] file group. This file could be a marker for malware infection, and should be investigated immediately."
 # Build the argument list with all required fileGroups
 $screenArgs = 'Template','Add',"/Template:$fileTemplateName"
