@@ -7,7 +7,7 @@
 
 # Using FSRM to Block users writing file with a forbiden extension.
 # This scripts can be add as a task to check newer version of extensions list : program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMANTICRYPTO\FSRM_ALTAE_AntiCrypto.ps1
+# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMANTICRYPTO\FSRM_ALTAE_2008.ps1
 # Before using this script, You have to install FSRM
 # Add Role -> File Services/File Server Ressource Manager
 # Alternative install can be done with the command: Install-WindowsFeature -Name FS-Resource-Manager -IncludeManagementTools
