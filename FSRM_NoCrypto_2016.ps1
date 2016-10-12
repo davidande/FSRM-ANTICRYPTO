@@ -96,7 +96,17 @@ Write-Host Creating File Screen $fileScreenName based on $fileTemplateName for t
 foreach ($share in $drivesContainingShares) {
 New-FsrmFileScreen -Path $share -Active:$true -Description "$fileScreenName" –IncludeGroup "$filegroupname" –Template "$fileTemplateName"
 }
-rm $wkdir\extensions.old
+
+# Keeping list to compare next #
+#time with new one #
+if (Test-Path "$wkdir\extension.old") 
+{
+    rm $wkdir\extensions.old
+}
+Else  
+{
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
+echo terminé
+}
 Exit
