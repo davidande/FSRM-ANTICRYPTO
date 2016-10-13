@@ -8,7 +8,7 @@ Those scripts and howto are given as is. Use at your own risck. I will take no r
 This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
  Also Thanks to Jpelectron who gave me the idea to go further.
 
-# Howto Use 
+# How-to Use 
 1-Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
 As sometime Windows file manager is configured in Case sensitive, you have to
 configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel obcaseinsensitive is set to 1
