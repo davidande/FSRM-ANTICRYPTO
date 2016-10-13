@@ -6,7 +6,7 @@ A very completelist is maintained by experiant.ca with infos gave by the communi
 Configuring FSRM make impossible to users to write files with forbiden extensions. So We use FSRM to avoid encrypted files to be saved as the extension used by the Crypto Process is Known.
 Those scripts and howto are given as is. Use at your own risck. I will take no responsability for that.
 This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
-Thanks to Jpelectron who gave me the idea to go further.
+ Also Thanks to Jpelectron who gave me the idea to go further.
 
 # Howto Use 
 1-Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
@@ -28,7 +28,7 @@ To check if everything is ok, just empty the extensions.old and lunch the script
 3- Task to update de file
 This scripts can be add as a task to check newer version of extensions list : 
 program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default C:\FSRMNOCRYPTO\FSRM_ALTAE_20**.ps1 
+Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default C:\FSRMNOCRYPTO\FSRM_NoCrypto_20**.ps1 
 
 # Sources #
 https://github.com/kinomakino/ransomware_file_extensions/blob/master/anti_ransomware.ps1

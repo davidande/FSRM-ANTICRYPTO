@@ -1,5 +1,7 @@
 ##############################
 # FSRM_ALTAE_2008.ps1        #
+# W2008 and 2008R2           #
+# may work en 2003R2         #
 # David ANDE - ALTAE         #
 # WWW.ALTAE.NET              #
 # GNU GENERAL PUBLIC LICENSE #
@@ -7,7 +9,7 @@
 
 # Using FSRM to Block users writing file with a forbiden extension.
 # This scripts can be add as a task to check newer version of extensions list : program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMANTICRYPTO\FSRM_ALTAE_2008.ps1
+# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMNOCRYPTO\FSRM_NoCrypto_2008.ps1
 # Before using this script, You have to install FSRM
 # Add Role -> File Services/File Server Ressource Manager
 # Alternative install can be done with the command: Install-WindowsFeature -Name FS-Resource-Manager -IncludeManagementTools
@@ -15,9 +17,10 @@
 # SMTP Server, Default destination mail and sender adress
 # Click on Send a test mail to check settings working and validate
 
-################################ Functions ################################
 ########## VARIABLE TO MODIFY #############
-$wkdir = "C:\FSRMANTICRYPTO"
+$wkdir = "C:\FSRMNOCRYPTO"
+
+################################ Functions ################################
 
 function ConvertFrom-Json20([Object] $obj)
 {
@@ -108,7 +111,7 @@ rm "$wkdir\notification.cfg"
 New-Item notification.cfg -type file
 Add-Content "$wkdir\notification.cfg" "Notification=e"
 Add-Content "$wkdir\notification.cfg" "`nRunLimitInterval=30"
-Add-Content notification.cfg "`nMessage=User [Source Io Owner] attempted to save [Source File Path] to [File Screen Path] on the [Server] server. This file is in the [Violated File Group] file group. This file could be a marker for malware infection, and should be investigated immediately."
+Add-Content "$wkdir\notofication.cfg"`nMessage=User [Source Io Owner] attempted to save [Source File Path] to [File Screen Path] on the [Server] server. This file is in the [Violated File Group] file group. This file could be a marker for malware infection, and should be investigated immediately."
 # Build the argument list with all required fileGroups
 $screenArgs = 'Template','Add',"/Template:$fileTemplateName"
 ForEach ($group in $fileGroups) {
