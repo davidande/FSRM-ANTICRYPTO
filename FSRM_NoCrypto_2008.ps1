@@ -1,5 +1,5 @@
 ##############################
-# FSRM_NoCrypto_2008.ps1        #
+# FSRM_NoCrypto_2008.ps1     #
 # W2008 and 2008R2           #
 # may work en 2003R2         #
 # David ANDE - ALTAE         #
