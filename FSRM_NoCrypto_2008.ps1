@@ -99,7 +99,7 @@ $fileTemplateName = "ALTAE_CryptoBlocker_Template"
 $fileScreenName = "ALTAE_CryptoBlockerScreen"
 
 $webClient = New-Object System.Net.WebClient
-$jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/get")
+$jsonStr = $webClient.DownloadString($url)
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 
 # Split the $monitoredExtensions array into fileGroups of less than 4kb to allow processing by filescrn.exe
