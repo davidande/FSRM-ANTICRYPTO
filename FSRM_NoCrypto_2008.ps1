@@ -118,8 +118,8 @@ ForEach ($group in $fileGroups) {
 
 Write-Host "Adding/replacing File Screen Template [$fileTemplateName] with Event Notification [notification.cfg] and Command Notification [$cmdConfFilename].."
 &filescrn.exe Template Delete /Template:$fileTemplateName /Quiet
-rm "$wkdir\notification.cfg"
-New-Item notification.cfg -type file
+Remove-Item "$wkdir\notification.cfg"
+New-Item "$wkdir\notification.cfg" -type file
 Add-Content "$wkdir\notification.cfg" "Notification=e"
 Add-Content "$wkdir\notification.cfg" "`nRunLimitInterval=30"
 Add-Content "$wkdir\notification.cfg" "`nMessage=User [Source Io Owner] attempted to save [Source File Path] to [File Screen Path] on the [Server] server. This file is in the [Violated File Group] file group. This file could be a marker for malware infection, and should be investigated immediately."
@@ -130,7 +130,7 @@ ForEach ($group in $fileGroups) {
     $screenArgs += "/Add-Filegroup:$($group.fileGroupName)"
 }
 
-&filescrn.exe $screenArgs /Add-Notification:"e,notification.cfg"
+&filescrn.exe $screenArgs /Add-Notification:"e,$wkdir\notification.cfg"
 $drivesContainingShares | % {
     Write-Host "#############################################"
     Write-Host "`Adding/replacing File Screen for [$_] with Source Template [$fileTemplateName].."
