@@ -19,6 +19,17 @@
 
 ########## VARIABLE TO MODIFY #############
 $wkdir = "C:\FSRMNOCRYPTO"
+###########################################
+
+# verifying if new crypto extensions available #
+$url = "https://fsrm.experiant.ca/api/v1/get"
+$path = "$wkdir\extensions.txt"
+$client = New-Object System.Net.WebClient
+$client.DownloadFile($url, $path)
+$dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
+if (!$dif) { 
+rm $wkdir\extensions.txt
+exit }
 
 ################################ Functions ################################
 
@@ -126,3 +137,16 @@ $drivesContainingShares | % {
     &filescrn.exe Screen Delete "/Path:$_" /Quiet
     &filescrn.exe Screen Add "/Path:$_" "/SourceTemplate:$fileTemplateName"
 }
+# Keeping list to compare next #
+#time with new one #
+if (Test-Path "$wkdir\extension.old") 
+{
+    rm $wkdir\extensions.old
+}
+Else  
+{
+cp $wkdir\extensions.txt $wkdir\extensions.old
+rm $wkdir\extensions.txt
+echo finish
+}
+Exit
