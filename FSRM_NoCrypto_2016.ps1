@@ -1,7 +1,6 @@
-##############################
-# FSRM_ALTAE_2008.ps1        #
-# W2008 and 2008R2           #
-# may work en 2003R2         #
+﻿##############################
+# FSRM_NoCrypto_2016.ps1     #
+# W2012, 2012R2 and 2016     #
 # David ANDE - ALTAE         #
 # WWW.ALTAE.NET              #
 # GNU GENERAL PUBLIC LICENSE #
@@ -9,7 +8,7 @@
 
 # Using FSRM to Block users writing file with a forbiden extension.
 # This scripts can be add as a task to check newer version of extensions list : program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMNOCRYPTO\FSRM_NoCrypto_2008.ps1
+# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMNOCRYPTO\FSRM_NoCrypto-2016.ps1
 # Before using this script, You have to install FSRM
 # Add Role -> File Services/File Server Ressource Manager
 # Alternative install can be done with the command: Install-WindowsFeature -Name FS-Resource-Manager -IncludeManagementTools
@@ -17,21 +16,45 @@
 # SMTP Server, Default destination mail and sender adress
 # Click on Send a test mail to check settings working and validate
 
-########## VARIABLE TO MODIFY #############
+###############################################
+# VARIABLES TO EDIT BEFORE USE #
+# Working directory
 $wkdir = "C:\FSRMNOCRYPTO"
-###########################################
 
-# verifying if new crypto extensions available #
-$url = "https://fsrm.experiant.ca/api/v1/get"
-$path = "$wkdir\extensions.txt"
-$client = New-Object System.Net.WebClient
-$client.DownloadFile($url, $path)
-$dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
-if (!$dif) { 
-rm $wkdir\extensions.txt
-exit }
+# Group Name in FSRM #
+$fileGroupName = "ALTAE_CryptoBlocker_extensions"
+$fileTemplateName = "ALTAE_TemplateBlocker_Crypto"
+$fileScreenName = "ALTAE_FiltreBlocker_Crypto"
+#############################################
 
-################################ Functions ################################
+# Verifying if new crypto extensions available #
+Invoke-WebRequest https://fsrm.experiant.ca/api/v1/get -OutFile $wkdir\extensions.txt
+
+$taille1 = Get-FileHash $wkdir\extensions.txt
+$taille2 = Get-FileHash $wkdir\extensions.old
+if ($taille1.Hash -eq $Taille2.Hash) {
+    Write-Host No New Crypto Extensions available
+    rm $wkdir\extensions.txt
+    Exit
+}
+Write-Host New Crypto extensions available will be added to FSRM
+
+# Listing all shared drives#
+$drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -match  '0|2147483648' } | Select -ExpandProperty Path | Select -Unique
+# $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
+Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
+
+# Command to be lunch in case of violation of Anticrypto FSRM rules #
+# defdault rule is non but You can use this one by adding 
+# $Command to the notification in the Template
+# This command stop lanmaserver to stop all shares
+# To restart the service use the comman "net start lanmanserver"
+$Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
+
+###################################################################################################
+   
+# Fonction to convert the extensions list #
+# in a compatible FSRM format             #                       
 
 function ConvertFrom-Json20([Object] $obj)
 {
@@ -39,104 +62,42 @@ function ConvertFrom-Json20([Object] $obj)
     $serializer = New-Object System.Web.Script.Serialization.JavaScriptSerializer
     return ,$serializer.DeserializeObject($obj)
 }
-
-Function New-CBArraySplit {
-
-    param(
-        $extArr,
-        $depth = 1
-    )
-
-    $extArr = $extArr | Sort-Object -Unique
-
-    # Concatenate the input array
-    $conStr = $extArr -join ','
-    $outArr = @()
-
-    # If the input string breaks the 4Kb limit
-    If ($conStr.Length -gt 4096) {
-        # Pull the first 4096 characters and split on comma
-        $conArr = $conStr.SubString(0,4096).Split(',')
-        # Find index of the last guaranteed complete item of the split array in the input array
-        $endIndex = [array]::IndexOf($extArr,$conArr[-2])
-        # Build shorter array up to that indexNumber and add to output array
-        $shortArr = $extArr[0..$endIndex]
-        $outArr += [psobject] @{
-            index = $depth
-            array = $shortArr
-        }
-
-        # Then call this function again to split further
-        $newArr = $extArr[($endindex + 1)..($extArr.Count -1)]
-        $outArr += New-CBArraySplit $newArr -depth ($depth + 1)
-        
-        return $outArr
-    }
-    # If the concat string is less than 4096 characters already, just return the input array
-    Else {
-        return [psobject] @{
-            index = $depth
-            array = $extArr
-        }  
-    }
-}
-
-################################ Functions ################################
-
-# Add to all drives
-$drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -match  '0|2147483648' } | Select -ExpandProperty Path | Select -Unique
-if ($drivesContainingShares -eq $null -or $drivesContainingShares.Length -eq 0)
-{
-    Write-Host "No drives containing shares were found. Exiting.."
-    exit
-}
-
-Write-Host "The following shares needing to be protected: $($drivesContainingShares -Join ",")"
-
-
-$fileGroupName = "ALTAE_CryptoBlocker_extensions"
-$fileTemplateName = "ALTAE_CryptoBlocker_Template"
-$fileScreenName = "ALTAE_CryptoBlockerScreen"
-
+############################################### SCRIPT ##############################
 $webClient = New-Object System.Net.WebClient
 $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/get")
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 
-# Split the $monitoredExtensions array into fileGroups of less than 4kb to allow processing by filescrn.exe
-$fileGroups = New-CBArraySplit $monitoredExtensions
-ForEach ($group in $fileGroups) {
-    $group | Add-Member -MemberType NoteProperty -Name fileGroupName -Value "$FileGroupName$($group.index)"
+# Destination mail adress Modify if You use mail notification
+# in the case of Mail Notification check your SMTP setting in the FSRM Options
+$maildestination = "XXXXXX@XXX.XX"
+
+$MailNotification = New-FsrmAction -Type Email -MailTo "$maildestination" -Subject "Cryptolocker Alert" -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60 
+###############################################
+
+$EventNotification = New-FsrmAction -Type Event -EventType Warning -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60
+
+
+# Creating FSRM File Group#
+Remove-FsrmFileGroup -Name "$fileGroupName" -Confirm:$false
+Write-Host Creating File Group $fileGroupName
+New-FsrmFileGroup -Name "$fileGroupName" –IncludePattern $monitoredExtensions
+
+# Creating FSRM File Template #
+# You Can modify the Notification to add the command to execute in case of violation
+#    -Notification $EventNotification,$commande    that will add $Commande to be started
+Remove-FsrmFileScreenTemplate -Name "$fileTemplateName" -Confirm:$false
+Write-Host Creating File Template $fileTemplateName including $fileGroupName
+New-FsrmFileScreenTemplate -Name "$fileTemplateName" -Active:$True -IncludeGroup "$fileGroupName" -Notification $EventNotification
+
+# Creating FSRM File Screen #
+foreach ($share in $drivesContainingShares) {
+Remove-FsrmFileScreen $share -Confirm:$false
+}
+Write-Host Creating File Screen $fileScreenName based on $fileTemplateName for the extensions list group $fileGroupName on drives $drivesContainingShares
+foreach ($share in $drivesContainingShares) {
+New-FsrmFileScreen -Path $share -Active:$true -Description "$fileScreenName" –IncludeGroup "$filegroupname" –Template "$fileTemplateName"
 }
 
-# Perform these steps for each of the 4KB limit split fileGroups
-ForEach ($group in $fileGroups) {
-    Write-Host "#############################################"
-    Write-Host "Adding/replacing File Group [$($group.fileGroupName)] with monitored file [$($group.array -Join ",")].."
-    &filescrn.exe filegroup Delete "/Filegroup:$($group.fileGroupName)" /Quiet
-    &filescrn.exe Filegroup Add "/Filegroup:$($group.fileGroupName)" "/Members:$($group.array -Join '|')"
-}
-
-Write-Host "Adding/replacing File Screen Template [$fileTemplateName] with Event Notification [notification.cfg] and Command Notification [$cmdConfFilename].."
-&filescrn.exe Template Delete /Template:$fileTemplateName /Quiet
-rm "$wkdir\notification.cfg"
-New-Item notification.cfg -type file
-Add-Content "$wkdir\notification.cfg" "Notification=e"
-Add-Content "$wkdir\notification.cfg" "`nRunLimitInterval=30"
-Add-Content "$wkdir\notification.cfg" "`nMessage=User [Source Io Owner] attempted to save [Source File Path] to [File Screen Path] on the [Server] server. This file is in the [Violated File Group] file group. This file could be a marker for malware infection, and should be investigated immediately."
-# Build the argument list with all required fileGroups
-$screenArgs = 'Template','Add',"/Template:$fileTemplateName"
-ForEach ($group in $fileGroups) {
-    Write-Host "#############################################"
-    $screenArgs += "/Add-Filegroup:$($group.fileGroupName)"
-}
-
-&filescrn.exe $screenArgs /Add-Notification:"e,notification.cfg"
-$drivesContainingShares | % {
-    Write-Host "#############################################"
-    Write-Host "`Adding/replacing File Screen for [$_] with Source Template [$fileTemplateName].."
-    &filescrn.exe Screen Delete "/Path:$_" /Quiet
-    &filescrn.exe Screen Add "/Path:$_" "/SourceTemplate:$fileTemplateName"
-}
 # Keeping list to compare next #
 #time with new one #
 if (Test-Path "$wkdir\extension.old") 
@@ -147,6 +108,6 @@ Else
 {
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
-echo finish
+echo terminé
 }
 Exit
