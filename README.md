@@ -28,7 +28,7 @@ To check if everything is ok, just empty the extensions.old and lunch the script
 3- Task to update de file
 This scripts can be add as a task to check newer version of extensions list : 
 program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default C:\FSRMNOCRYPTO\FSRM_NoCrypto_20**.ps1 
+Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default "C:\FSRMNOCRYPTO\FSRM_NoCrypto_20**.ps1"
 
 # Sources #
 https://github.com/kinomakino/ransomware_file_extensions/blob/master/anti_ransomware.ps1
