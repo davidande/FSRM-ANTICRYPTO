@@ -1,4 +1,4 @@
-﻿##############################
+##############################
 # FSRM_NoCrypto_2016.ps1     #
 # W2012, 2012R2 and 2016     #
 # David ANDE - ALTAE         #
@@ -28,7 +28,14 @@ $fileScreenName = "ALTAE_FiltreBlocker_Crypto"
 #############################################
 
 # Verifying if new crypto extensions available #
-Invoke-WebRequest https://fsrm.experiant.ca/api/v1/get -OutFile $wkdir\extensions.txt
+Invoke-WebRequest https://fsrm.experiant.ca/api/v1/combined -OutFile $wkdir\extensions.txt
+
+$test = Test-Path $wkdir\extensions.txt
+if (-Not $test) {
+    Write-Host Cannot join the distant extensions list
+    Exit}
+Else {
+    Write-Host Distant extensions list online }
 
 $taille1 = Get-FileHash $wkdir\extensions.txt
 $taille2 = Get-FileHash $wkdir\extensions.old
@@ -64,7 +71,7 @@ function ConvertFrom-Json20([Object] $obj)
 }
 ############################################### SCRIPT ##############################
 $webClient = New-Object System.Net.WebClient
-$jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/get")
+$jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined")
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 
 # Destination mail adress Modify if You use mail notification
@@ -108,6 +115,6 @@ Else
 {
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
-echo terminé
+echo finish
 }
 Exit
