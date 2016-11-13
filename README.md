@@ -16,7 +16,7 @@ configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Ses
 2-Download the FSRMNOCRYPTO.ZIP and UnZip it to C:\ so C:\FSRMNOCRYPTO contain:
 - FSRM_NoCrypto_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2
 - FSRM_NoCrypto_2016.ps1 -> to be used with Windows Server 2012, 2012 R2 and 2016
-- extensions.old -> used by FSRM_ALTAE_2016.ps1 to compare local en remote extensions list
+- extensions.old -> used to compare local en remote extensions list
 - Readme.md -> this file
 - Licence
 
