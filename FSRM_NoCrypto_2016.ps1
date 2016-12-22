@@ -27,6 +27,15 @@ $fileTemplateName = "ALTAE_TemplateBlocker_Crypto"
 $fileScreenName = "ALTAE_FiltreBlocker_Crypto"
 #############################################
 
+# Drives to exclude for FSRM bloking
+# If You want to exclude complete Path or special directory so write for exemple "C:\share" for  specific share 
+# or "D:\shar*" for all shares in D starting by shar or "E:\*" for all shares in E
+# or"D:\*shar*"for all shares in D containing shar.
+# If nothing to exclude let the value to "0". only one value per line so only 2 exclusions for the moment :-)
+$driveexclu1= "0"
+$driveexclu2= "0"
+#############################################
+
 # Verifying if new crypto extensions available #
 Invoke-WebRequest https://fsrm.experiant.ca/api/v1/combined -OutFile $wkdir\extensions.txt
 
@@ -40,7 +49,7 @@ Else {
 $taille1 = Get-FileHash $wkdir\extensions.txt
 $taille2 = Get-FileHash $wkdir\extensions.old
 if ($taille1.Hash -eq $Taille2.Hash) {
-    Write-Host No New Crypto Extensions available
+   Write-Host No New Crypto Extensions available
     rm $wkdir\extensions.txt
     Exit
 }
@@ -49,6 +58,25 @@ Write-Host New Crypto extensions available will be added to FSRM
 # Listing all shared drives#
 $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -match  '0|2147483648' } | Select -ExpandProperty Path | Select -Unique
 # $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
+# Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
+
+# If You want to exclude complete Path or special directory so write for exemple "C:\share" for  specific share 
+# or "D:\shar*" for all shares in D starting by shar or "E:\*" for all shares in E
+# or"D:\*shar*"for all shares in D containing shar.
+# If nothing to exclude let the value to "0"
+$driveexclu1= "0"
+$driveexclu2= "0"
+
+if ($driveexclu2 -ne '0' ) {
+    $drivesfilter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$driveexclu1"} | where { $_ -notlike "$driveexclu2"})
+    $drivesContainingShares = $drivesfilter}
+    Else {
+    if ($driveexclu1 -ne '0') {
+    $drivesfilter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$driveexclu1"})
+    $drivesContainingShares = $drivesfilter}
+    Else {
+    Write-Host "Shared filtered"}
+    }
 Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
