@@ -32,8 +32,15 @@ $fileScreenName = "ALTAE_FiltreBlocker_Crypto"
 # or "D:\shar*" for all shares in D starting by shar or "E:\*" for all shares in E
 # or"D:\*shar*"for all shares in D containing shar.
 # If nothing to exclude let the value to "0". only one value per line so only 2 exclusions for the moment :-)
-$driveexclu1= "0"
-$driveexclu2= "0"
+$drive_exclu1= "C:\Windows*"
+$drive_exclu2= "0"
+#############################################
+
+# Extensions to exclude from list
+# Same as drive exclusion
+# ex: $ext_exclu1 = "*.777"
+$ext_exclu1 = "*.777"
+$ext_exclu2 = "0"
 #############################################
 
 # Verifying if new crypto extensions available #
@@ -60,24 +67,29 @@ $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Wh
 # $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
 # Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
 
-if ($driveexclu2 -ne '0' ) {
-    $drivesfilter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$driveexclu1"} | where { $_ -notlike "$driveexclu2"})
+
+$drivesContainingShares >> "$wkdir\drivesbase.txt"
+if ($drive_exclu2 -ne '0' ) {
+    $drives_filter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$drive_exclu1"} | where { $_ -notlike "$drivee_xclu2"})
     $drivesContainingShares = $drivesfilter}
     Else {
-    if ($driveexclu1 -ne '0') {
-    $drivesfilter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$driveexclu1"})
+    if ($drive_exclu1 -ne '0') {
+    $drivesfilter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$drive_exclu1"})
     $drivesContainingShares = $drivesfilter}
     Else {
-    Write-Host "Shared filtered"}
     }
+    }
+    Write-Host "Shared filtered"
 Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
+
+
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
 # defdault rule is non but You can use this one by adding 
 # $Command to the notification in the Template
 # This command stop lanmaserver to stop all shares
 # To restart the service use the comman "net start lanmanserver"
-$Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
+# $Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
 
 ###################################################################################################
    
@@ -90,10 +102,22 @@ function ConvertFrom-Json20([Object] $obj)
     $serializer = New-Object System.Web.Script.Serialization.JavaScriptSerializer
     return ,$serializer.DeserializeObject($obj)
 }
-############################################### SCRIPT ##############################
 $webClient = New-Object System.Net.WebClient
 $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined")
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
+$monitoredExtensions >> "$wkdir\extsbase.txt"
+
+if ($ext_exclu2 -ne '0') {
+    $ext_filter = (Get-Content "$wkdir\extsbase.txt" | where { $_ -notlike "$ext_exclu1"} | where { $_ -notlike "$ext_exclu2"})
+    $monitoredExtensions = $ext_filter }
+    Else {
+    if ($ext_exclu1 -ne '0') {
+    $ext_filter = (Get-Content "$wkdir\extsbase.txt" | where { $_ -notlike "$ext_exclu1"})
+    $monitoredExtensions = $ext_filter}
+    Else {
+    }
+    }
+Write-Host "Extension accepted $ext_exclu1,$ext_exclu2"
 
 # Destination mail adress Modify if You use mail notification
 # in the case of Mail Notification check your SMTP setting in the FSRM Options
@@ -136,6 +160,8 @@ Else
 {
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
-echo finish
+rm $wkdir\drivesbase.txt
+rm $wkdir\extsbase.txt
+echo Finish
 }
 Exit
