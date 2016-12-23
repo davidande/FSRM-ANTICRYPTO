@@ -131,7 +131,7 @@ $EventNotification = New-FsrmAction -Type Event -EventType Warning -Body "The us
 # Creating FSRM File Group#
 Remove-FsrmFileGroup -Name "$fileGroupName" -Confirm:$false
 Write-Host Creating File Group $fileGroupName
-New-FsrmFileGroup -Name "$fileGroupName" –IncludePattern $monitoredExtensions
+New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $monitoredExtensions
 
 # Creating FSRM File Template #
 # You Can modify the Notification to add the command to execute in case of violation
