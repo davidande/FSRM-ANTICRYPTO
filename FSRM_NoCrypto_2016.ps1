@@ -12,7 +12,7 @@
 # Before using this script, You have to install FSRM
 # Add Role -> File Services/File Server Ressource Manager
 # Alternative install can be done with the command: Install-WindowsFeature -Name FS-Resource-Manager -IncludeManagementTools
-# Lunch FSRM.MSC and Right Click on File Server Ressource Manager to configure Mail notification Settings
+# if You want to use the mail notification, lunch FSRM.MSC and Right Click on File Server Ressource Manager to configure Mail notification Settings
 # SMTP Server, Default destination mail and sender adress
 # Click on Send a test mail to check settings working and validate
 
@@ -32,14 +32,15 @@ $fileScreenName = "ALTAE_FiltreBlocker_Crypto"
 # or "D:\shar*" for all shares in D starting by shar or "E:\*" for all shares in E
 # or"D:\*shar*"for all shares in D containing shar.
 # If nothing to exclude let the value to "0". only one value per line so only 2 exclusions for the moment :-)
-$drive_exclu1= "C:\Windows*"
+# ex: $drive_exclu1= "C:\Windows*"
+$drive_exclu1= "0"
 $drive_exclu2= "0"
 #############################################
 
-# Extensions to exclude from list
+# Extensions to exclude from bloking list
 # Same as drive exclusion
 # ex: $ext_exclu1 = "*.777"
-$ext_exclu1 = "*.777"
+$ext_exclu1 = "0"
 $ext_exclu2 = "0"
 #############################################
 
@@ -79,17 +80,15 @@ if ($drive_exclu2 -ne '0' ) {
     Else {
     }
     }
-    Write-Host "Shared filtered"
+Write-Host "Shared filtered"
 Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
-
-
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
 # defdault rule is non but You can use this one by adding 
 # $Command to the notification in the Template
 # This command stop lanmaserver to stop all shares
 # To restart the service use the comman "net start lanmanserver"
-# $Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
+$Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
 
 ###################################################################################################
    
