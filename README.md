@@ -23,6 +23,8 @@ Download the FSRMNOCRYPTO.ZIP and UnZip it to C:\ so C:\FSRMNOCRYPTO contain:
 - Licence
 
 3- Execute the script
+First check that .NET and ASP.NET are installed (check fonctionnalities)
+Second check Set-ExecutionPolicy to acces execution of nonsigned scripts (bypass oo remotesigned)
 Start the script in a Powershell session with admin right.
 First time You should see some errors. No problem it's only cause by deleting objects that are not yet created.
 To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error
