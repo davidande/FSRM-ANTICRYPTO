@@ -169,6 +169,7 @@ ForEach ($group in $fileGroups) {
 Write-Host "Adding/replacing File Screen Template [$fileTemplateName] with Event Notification [notification.cfg] and Command Notification [$cmdConfFilename].."
 &filescrn.exe Template Delete /Template:$fileTemplateName /Quiet
 Remove-Item "$wkdir\notification.cfg"
+Start-Sleep -Seconds 3
 New-Item "$wkdir\notification.cfg" -type file
 Add-Content "$wkdir\notification.cfg" "Notification=e"
 Add-Content "$wkdir\notification.cfg" "`nRunLimitInterval=30"
