@@ -7,6 +7,13 @@ Configuring FSRM make impossible to users to write files with forbiden extension
 Those scripts and howto are given as is. Use at your own risck. I will take no responsability for that.
 This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
  Also Thanks to Jpelectron who gave me the idea to go further.
+ 
+# So What!
+- update list of banned extensions (through task manager or manually)
+- configure extensions list, template and applying on shares
+- possible to exclure 2 extensions and some shares
+- possibility to stop all shares when attack is detected
+- 
 
 # How-to Use 
 1- Installation of FSRM Role
