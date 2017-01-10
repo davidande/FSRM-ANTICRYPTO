@@ -13,7 +13,6 @@ This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
 - configure extensions list, template and applying on shares
 - possible to exclure 2 extensions and some shares
 - possibility to stop all shares when attack is detected
-- 
 
 # How-to Use 
 1- Installation of FSRM Role
