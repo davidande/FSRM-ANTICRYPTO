@@ -21,7 +21,7 @@ As sometime Windows file manager is configured in Case sensitive, you have to
 configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel obcaseinsensitive is set to 1
 
 2- Installation of script
-Download the FSRMNOCRYPTO.ZIP and UnZip it to C:\ so C:\FSRMNOCRYPTO contain:
+Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\ so C:\FSRMNOCRYPTO contain:
 - FSRM_NoCrypto_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2
 - FSRM_NoCrypto_2016.ps1 -> to be used with Windows Server 2012, 2012 R2 and 2016
 - extensions.old -> used to compare local en remote extensions list
