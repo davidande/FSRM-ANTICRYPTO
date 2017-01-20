@@ -26,8 +26,8 @@ $wkdir = "C:\FSRMNOCRYPTO"
 # or"D:\*shar*"for all shares in D containing shar.
 # If nothing to exclude let the value to "0". only one value per line so only 2 exclusions for the moment :-)
 # ex: $drive_exclu1= "C:\Windows*"
-$drive_exclu1= "0"
-$drive_exclu2= "0"
+$drive_exclu1 = "0"
+$drive_exclu2 = "0"
 #############################################
 
 # Extensions to exclude from bloking list
