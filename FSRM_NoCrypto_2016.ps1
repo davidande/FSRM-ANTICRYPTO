@@ -68,7 +68,7 @@ $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Wh
 # $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -eq 0 } | Select -ExpandProperty Path | % { "$((Get-Item -ErrorAction SilentlyContinue $_).Root)" } | Select -Unique
 # Write-Host "Drives to be protected: $($drivesContainingShares -Join ",")"
 
-　
+
 $drivesContainingShares >> "$wkdir\drivesbase.txt"
 if ($drive_exclu2 -ne '0' ) {
     $drives_filter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$drive_exclu1"} | where { $_ -notlike "$drivee_xclu2"})
@@ -127,7 +127,6 @@ $MailNotification = New-FsrmAction -Type Email -MailTo "$maildestination" -Subje
 
 $EventNotification = New-FsrmAction -Type Event -EventType Warning -Body "The user [Source Io Owner] try to save [Source File Path] in [File Screen Path] on [Server]. This extension is contained in [Violated File Group], and is not permit on this server." -RunLimitInterval 60
 
-　
 # Creating FSRM File Group#
 Remove-FsrmFileGroup -Name "$fileGroupName" -Confirm:$false
 Write-Host Creating File Group $fileGroupName
