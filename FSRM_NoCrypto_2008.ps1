@@ -30,13 +30,6 @@ $drive_exclu1 = "0"
 $drive_exclu2 = "0"
 #############################################
 
-# Extensions to exclude from bloking list
-# Same as drive exclusion
-# ex: $ext_exclu1 = "*.777"
-$ext_exclu1 = "0"
-$ext_exclu2 = "0"
-#############################################
-
 # verifying if new crypto extensions available #
 $url = "https://fsrm.experiant.ca/api/v1/get"
 $path = "$wkdir\extensions.txt"
@@ -139,21 +132,10 @@ $webClient = New-Object System.Net.WebClient
 $jsonStr = $webClient.DownloadString($url)
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
-
-if ($ext_exclu2 -ne '0') {
-    $ext_filter = (Get-Content "$wkdir\extsbase.txt" | where { $_ -notlike "$ext_exclu1"} | where { $_ -notlike "$ext_exclu2"})
-    $monitoredExtensions = $ext_filter }
-    Else {
-    if ($ext_exclu1 -ne '0') {
-    $ext_filter = (Get-Content "$wkdir\extsbase.txt" | where { $_ -notlike "$ext_exclu1"})
-    $monitoredExtensions = $ext_filter}
-    Else {
-    }
-    }
-Write-Host "Extension accepted $ext_exclu1,$ext_exclu2"
+$ext_filter = Compare-Object $(Get-content "$wkdir\extsbase.txt") $(Get-content "$wkdir\ext_to_accept.txt") -IncludeEqual | where-object {$_.SideIndicator -eq "<="} | select InputObject | select -ExpandProperty InputObject
 
 # Split the $monitoredExtensions array into fileGroups of less than 4kb to allow processing by filescrn.exe
-$fileGroups = New-CBArraySplit $monitoredExtensions
+$fileGroups = New-CBArraySplit $ext_filter
 ForEach ($group in $fileGroups) {
     $group | Add-Member -MemberType NoteProperty -Name fileGroupName -Value "$FileGroupName$($group.index)"
 }
