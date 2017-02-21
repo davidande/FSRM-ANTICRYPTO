@@ -37,9 +37,9 @@ Start the script in a Powershell session with admin right.
 First time You should see some errors. No problem it's only cause by deleting objects that are not yet created.
 To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error
 
-4- Drive and extension exclusion (only in the 2016 script for the moment)
-As some program use certain type of extension that are known to be ine the ransomware list, You can do 2 exclusions
-Same thing with drives that You don't want the protection to apply on.
+4- Drive and extension exclusion. 
+As some program use certain type of extension that are known to be ine the ransomware list, You can put the list of extensions to bypass the FSRM blocking filter in the file est_to_accept.txt
+For the drive extension You can exclude 2 from bloking directly in the script.
 
 5- Task to update de file
 This scripts can be add as a task to check newer version of extensions list : 
