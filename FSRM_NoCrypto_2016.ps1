@@ -37,13 +37,6 @@ $drive_exclu1 = "0"
 $drive_exclu2 = "0"
 #############################################
 
-# Extensions to exclude from bloking list
-# Same as drive exclusion
-# ex: $ext_exclu1 = "*.777"
-$ext_exclu1 = "0"
-$ext_exclu2 = "0"
-#############################################
-
 # Verifying if new crypto extensions available #
 Invoke-WebRequest https://fsrm.experiant.ca/api/v1/combined -OutFile $wkdir\extensions.txt
 
@@ -106,17 +99,7 @@ $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined"
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 
-if ($ext_exclu2 -ne '0') {
-    $ext_filter = (Get-Content "$wkdir\extsbase.txt" | where { $_ -notlike "$ext_exclu1"} | where { $_ -notlike "$ext_exclu2"})
-    $monitoredExtensions = $ext_filter }
-    Else {
-    if ($ext_exclu1 -ne '0') {
-    $ext_filter = (Get-Content "$wkdir\extsbase.txt" | where { $_ -notlike "$ext_exclu1"})
-    $monitoredExtensions = $ext_filter}
-    Else {
-    }
-    }
-Write-Host "Extension accepted $ext_exclu1,$ext_exclu2"
+$ext_filter = Compare-Object $(Get-content "$wkdir\extsbase.txt") $(Get-content "$wkdir\ext_to_accept.txt") -IncludeEqual | where-object {$_.SideIndicator -eq "<="} | select InputObject | select -ExpandProperty InputObject
 
 # Destination mail adress Modify if You use mail notification
 # in the case of Mail Notification check your SMTP setting in the FSRM Options
@@ -130,7 +113,7 @@ $EventNotification = New-FsrmAction -Type Event -EventType Warning -Body "The us
 # Creating FSRM File Group#
 Remove-FsrmFileGroup -Name "$fileGroupName" -Confirm:$false
 Write-Host Creating File Group $fileGroupName
-New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $monitoredExtensions
+New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $ext_filter
 
 # Creating FSRM File Template #
 # You Can modify the Notification to add the command to execute in case of violation
