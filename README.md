@@ -11,7 +11,8 @@ This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
 # So What!
 - update list of banned extensions (through task manager or manually)
 - configure extensions list, template and applying on shares
-- possible to exclure 2 extensions and some shares
+- possible to exclure extensions from the blocked list
+- possible to exclude shares
 - possibility to stop all shares when attack is detected
 
 # How-to Use 
@@ -25,6 +26,7 @@ Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRM
 - FSRM_NoCrypto_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2
 - FSRM_NoCrypto_2016.ps1 -> to be used with Windows Server 2012, 2012 R2 and 2016
 - extensions.old -> used to compare local en remote extensions list
+- ext-to-accept.txt -> is use to input all the extensions that are in the blocked list to be accepted
 - Readme.md -> this file
 - Licence
 
