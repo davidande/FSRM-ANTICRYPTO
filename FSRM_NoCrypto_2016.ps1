@@ -64,11 +64,11 @@ $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Wh
 
 $drivesContainingShares >> "$wkdir\drivesbase.txt"
 if ($drive_exclu2 -ne '0' ) {
-    $drives_filter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$drive_exclu1"} | where { $_ -notlike "$drivee_xclu2"})
+    $drives_filter = (Get-Content "$wkdir\drivesbase.txt" | where { $_ -notlike "$drive_exclu1"} | where { $_ -notlike "$drivee_xclu2"})
     $drivesContainingShares = $drivesfilter}
     Else {
     if ($drive_exclu1 -ne '0') {
-    $drivesfilter = (Get-Content .\drivesbase.txt | where { $_ -notlike "$drive_exclu1"})
+    $drivesfilter = (Get-Content "$wkdir\drivesbase.txt" | where { $_ -notlike "$drive_exclu1"})
     $drivesContainingShares = $drivesfilter}
     Else {
     }
