@@ -11,8 +11,8 @@ This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
 # So What!
 - update list of banned extensions (through task manager or manually)
 - configure extensions list, template and applying on shares
-- possible to exclure extensions from the blocked list
-- possible to exclude shares
+- possibility to exclure extensions from the blocked list (false positive)
+- possibility to exclude shares (excluding some specific shares like usb dongle...) 
 - possibility to stop all shares when attack is detected
 
 # How-to Use 
