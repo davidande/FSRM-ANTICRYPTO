@@ -49,44 +49,51 @@ function ConvertFrom-Json20([Object] $obj)
     return ,$serializer.DeserializeObject($obj)
 }
 
-Function New-CBArraySplit {
-
+Function New-CBArraySplit
+{
+   
     param(
-        $extArr,
-        $depth = 1
+        $Extensions
     )
 
-    $extArr = $extArr | Sort-Object -Unique
+    $Extensions = $Extensions | Sort-Object -Unique
 
-    # Concatenate the input array
-    $conStr = $extArr -join ','
-    $outArr = @()
+    $workingArray = @()
+    $WorkingArrayIndex = 1
+    $LengthOfStringsInWorkingArray = 0
 
-    # If the input string breaks the 4Kb limit
-    If ($conStr.Length -gt 4096) {
-        # Pull the first 4096 characters and split on comma
-        $conArr = $conStr.SubString(0,4096).Split(',')
-        # Find index of the last guaranteed complete item of the split array in the input array
-        $endIndex = [array]::IndexOf($extArr,$conArr[-2])
-        # Build shorter array up to that indexNumber and add to output array
-        $shortArr = $extArr[0..$endIndex]
-        $outArr += [psobject] @{
-            index = $depth
-            array = $shortArr
+    $Extensions | ForEach-Object {
+
+        if (($LengthOfStringsInWorkingArray + 1 + $_.Length) -gt 4000) 
+        {   
+            # Adding this item to the working array (with +1 for a comma)
+            # pushes the contents past the 4Kb limit
+            # so output the workingArray
+            [PSCustomObject]@{
+                index = $WorkingArrayIndex
+                FileGroupName = "$Script:FileGroupName$WorkingArrayIndex"
+                array = $workingArray
+            }
+            
+            # and reset the workingArray and counters
+            $workingArray = @($_) # new workingArray with current Extension in it
+            $LengthOfStringsInWorkingArray = $_.Length
+            $WorkingArrayIndex++
+
         }
-
-        # Then call this function again to split further
-        $newArr = $extArr[($endindex + 1)..($extArr.Count -1)]
-        $outArr += New-CBArraySplit $newArr -depth ($depth + 1)
-        
-        return $outArr
+        else #adding this item to the workingArray is fine
+        {
+            $workingArray += $_
+            $LengthOfStringsInWorkingArray += (1 + $_.Length)  #1 for imaginary joining comma
+        }
     }
-    # If the concat string is less than 4096 characters already, just return the input array
-    Else {
-        return [psobject] @{
-            index = $depth
-            array = $extArr
-        }  
+
+    # The last / only workingArray won't have anything to push it past 4Kb
+    # and trigger outputting it, so output that one as well
+    [PSCustomObject]@{
+        index = ($WorkingArrayIndex)
+        FileGroupName = "$Script:FileGroupName$WorkingArrayIndex"
+        array = $workingArray
     }
 }
 
