@@ -135,8 +135,10 @@ $fileGroupName = "ALTAE_CryptoBlocker_extensions"
 $fileTemplateName = "ALTAE_CryptoBlocker_Template"
 $fileScreenName = "ALTAE_CryptoBlockerScreen"
 
-$webClient = New-Object System.Net.WebClient
-$jsonStr = $webClient.DownloadString($url)
+# old download method
+# $webClient = New-Object System.Net.WebClient
+# $jsonStr = $webClient.DownloadString($url)
+$jsonStr = Invoke-WebRequest -Uri https://fsrm.experiant.ca/api/v1/get
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 $ext_filter = Compare-Object $(Get-content "$wkdir\extsbase.txt") $(Get-content "$wkdir\ext_to_accept.txt") -IncludeEqual | where-object {$_.SideIndicator -eq "<="} | select InputObject | select -ExpandProperty InputObject
