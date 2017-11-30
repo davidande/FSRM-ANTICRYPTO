@@ -94,8 +94,11 @@ function ConvertFrom-Json20([Object] $obj)
     $serializer = New-Object System.Web.Script.Serialization.JavaScriptSerializer
     return ,$serializer.DeserializeObject($obj)
 }
-$webClient = New-Object System.Net.WebClient
-$jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined")
+# depreciated commands
+# $webClient = New-Object System.Net.WebClient
+# $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined")
+
+$jsonStr = Invoke-WebRequest -Uri https://fsrm.experiant.ca/api/v1/get
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 
