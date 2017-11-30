@@ -16,6 +16,9 @@ This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
 - possibility to stop all shares when attack is detected
 
 # How-to Use 
+
+First of all You need at least Powershell V3 installed!!!!!!!!!
+
 1- Installation of FSRM Role
 Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
 As sometime Windows file manager is configured in Case sensitive, you have to
