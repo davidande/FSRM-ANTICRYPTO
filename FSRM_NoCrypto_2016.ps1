@@ -36,9 +36,16 @@ $fileScreenName = "ALTAE_FiltreBlocker_Crypto"
 $drive_exclu1 = "0"
 $drive_exclu2 = "0"
 #############################################
-
+Try
+{
 # Verifying if new crypto extensions available #
 Invoke-WebRequest https://fsrm.experiant.ca/api/v1/combined -OutFile $wkdir\extensions.txt
+}
+Catch
+{
+Write-Host Remote extension list Offline - Quit
+exit
+}
 
 $test = Test-Path $wkdir\extensions.txt
 if (-Not $test) {
@@ -97,10 +104,17 @@ function ConvertFrom-Json20([Object] $obj)
 # depreciated commands
 # $webClient = New-Object System.Net.WebClient
 # $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined")
-
+Try
+{
 $jsonStr = Invoke-WebRequest -Uri https://fsrm.experiant.ca/api/v1/get
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
+}
+Catch
+{
+Write-Host Error parsing extension list - Quit
+exit
+}
 
 $ext_filter = Compare-Object $(Get-content "$wkdir\extsbase.txt") $(Get-content "$wkdir\ext_to_accept.txt") -IncludeEqual | where-object {$_.SideIndicator -eq "<="} | select InputObject | select -ExpandProperty InputObject
 
