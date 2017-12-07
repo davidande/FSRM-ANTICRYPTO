@@ -17,6 +17,18 @@
 # SMTP Server, Default destination mail and sender adress
 # Click on Send a test mail to check settings working and validate
 
+# First of all powershell 3 or higher is needed
+# This scripts is not compatible with Powershell v2
+
+$powershellVer = $PSVersionTable.PSVersion.Major
+
+if ($powershellVer -le 2)
+{
+    Write-Host "`n####"
+    Write-Host "ERROR: PowerShell v3 or higher required."
+    exit
+}
+
 ########## VARIABLE TO MODIFY #############
 $wkdir = "C:\FSRMNOCRYPTO"
 ###########################################
