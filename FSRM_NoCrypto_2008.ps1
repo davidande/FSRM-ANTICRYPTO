@@ -31,14 +31,19 @@ $drive_exclu2 = "0"
 #############################################
 
 # verifying if new crypto extensions available #
+
 $url = "https://fsrm.experiant.ca/api/v1/get"
 $path = "$wkdir\extensions.txt"
 $client = New-Object System.Net.WebClient
 $client.DownloadFile($url, $path)
 $dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
+
 if (!$dif) { 
+Write-Host "`n####"
+Write-Host "No new extensions to apply - Quit"
 rm $wkdir\extensions.txt
-exit }
+exit 
+}
 
 ################################ Functions ################################
 
@@ -104,6 +109,7 @@ $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Wh
 if ($drivesContainingShares -eq $null -or $drivesContainingShares.Length -eq 0)
 {
     Write-Host "No drives containing shares were found. Exiting.."
+    rm $wkdir\extensions.txt
     exit
 }
 $drivesContainingShares >> "$wkdir\drivesbase.txt"
@@ -138,20 +144,30 @@ $fileScreenName = "ALTAE_CryptoBlockerScreen"
 # old download method
 # $webClient = New-Object System.Net.WebClient
 # $jsonStr = $webClient.DownloadString($url)
+Try
+{
 $jsonStr = Invoke-WebRequest -Uri https://fsrm.experiant.ca/api/v1/get
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 $ext_filter = Compare-Object $(Get-content "$wkdir\extsbase.txt") $(Get-content "$wkdir\ext_to_accept.txt") -IncludeEqual | where-object {$_.SideIndicator -eq "<="} | select InputObject | select -ExpandProperty InputObject
+}
+Catch
+{
+Write-Host Remote extension list Offline - Quit
+rm $wkdir\drivesbase.txt
+rm $wkdir\extensions.txt
+exit
+}
 
 # Split the $monitoredExtensions array into fileGroups of less than 4kb to allow processing by filescrn.exe
 $fileGroups = New-CBArraySplit $ext_filter
 ForEach ($group in $fileGroups) {
-    $group | Add-Member -MemberType NoteProperty -Name fileGroupName -Value "$FileGroupName$($group.index)"
+    # $group | Add-Member -MemberType NoteProperty -Name fileGroupName -Value "$FileGroupName$($group.index)"
 }
 
 # Perform these steps for each of the 4KB limit split fileGroups
 ForEach ($group in $fileGroups) {
-    Write-Host "#############################################"
+    Write-Host "`n####"
     Write-Host "Adding/replacing File Group [$($group.fileGroupName)] with monitored file [$($group.array -Join ",")].."
     &filescrn.exe filegroup Delete "/Filegroup:$($group.fileGroupName)" /Quiet
     &filescrn.exe Filegroup Add "/Filegroup:$($group.fileGroupName)" "/Members:$($group.array -Join '|')"
@@ -168,13 +184,13 @@ Add-Content "$wkdir\notification.cfg" "`nMessage=User [Source Io Owner] attempte
 # Build the argument list with all required fileGroups
 $screenArgs = 'Template','Add',"/Template:$fileTemplateName"
 ForEach ($group in $fileGroups) {
-    Write-Host "#############################################"
+    Write-Host "`n####"
     $screenArgs += "/Add-Filegroup:$($group.fileGroupName)"
 }
 
 &filescrn.exe $screenArgs /Add-Notification:"e,$wkdir\notification.cfg"
 $drivesContainingShares | % {
-    Write-Host "#############################################"
+    Write-Host "`n####"
     Write-Host "`Adding/replacing File Screen for [$_] with Source Template [$fileTemplateName].."
     &filescrn.exe Screen Delete "/Path:$_" /Quiet
     &filescrn.exe Screen Add "/Path:$_" "/SourceTemplate:$fileTemplateName"
@@ -191,6 +207,6 @@ cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\drivesbase.txt
 rm $wkdir\extsbase.txt
 rm $wkdir\extensions.txt
-echo finish
+Write-Host "Done"
 }
 Exit
