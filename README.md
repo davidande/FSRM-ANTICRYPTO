@@ -17,7 +17,12 @@ This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
 
 # How-to Use 
 
-First of all You need at least Powershell V3 installed!!!!!!!!!
+First of all You need at least Powershell V3 installed
+for 2008
+https://blog.adsl2meg.fr/installer-powershell-3-sur-windows-server-2008-r2/
+
+Without Powershell V3 ou V4, the script will end
+
 
 1- Installation of FSRM Role
 Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
