@@ -37,7 +37,7 @@ $wkdir = "C:\FSRMNOCRYPTO"
 
 # $url is where to donwload extensionnlist from
 # don't change if You don't know what You are doing
-$url = "https://fsrm.experiant.ca/api/v1/combined"
+$url = "https://fsrm.experiant.ca/api/v1/get"
 
 ###########################################
 # Drives to exclude for FSRM bloking
