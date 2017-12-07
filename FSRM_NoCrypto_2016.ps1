@@ -16,10 +16,26 @@
 # SMTP Server, Default destination mail and sender adress
 # Click on Send a test mail to check settings working and validate
 
-###############################################
-# VARIABLES TO EDIT BEFORE USE #
-# Working directory
+# First of all powershell 3 or higher is needed
+# This scripts is not compatible with Powershell v2
+
+$powershellVer = $PSVersionTable.PSVersion.Major
+
+if ($powershellVer -le 2)
+{
+    Write-Host "`n####"
+    Write-Host "ERROR: PowerShell v3 or higher required."
+    exit
+}
+
+########## VARIABLE TO MODIFY #############
+# $wkdir is where the scripts are
+# better using this one
 $wkdir = "C:\FSRMNOCRYPTO"
+
+# $url is where to donwload extensionnlist from
+# don't change if You don't know what You are doing
+$url = "https://fsrm.experiant.ca/api/v1/combined"
 
 # Group Name in FSRM #
 $fileGroupName = "ALTAE_CryptoBlocker_extensions"
@@ -39,7 +55,7 @@ $drive_exclu2 = "0"
 Try
 {
 # Verifying if new crypto extensions available #
-Invoke-WebRequest https://fsrm.experiant.ca/api/v1/combined -OutFile $wkdir\extensions.txt
+Invoke-WebRequest $url -OutFile $wkdir\extensions.txt
 }
 Catch
 {
@@ -106,7 +122,7 @@ function ConvertFrom-Json20([Object] $obj)
 # $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined")
 Try
 {
-$jsonStr = Invoke-WebRequest -Uri https://fsrm.experiant.ca/api/v1/get
+$jsonStr = Invoke-WebRequest -Uri $url
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 }
