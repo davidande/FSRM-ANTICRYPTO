@@ -18,8 +18,8 @@ This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
 # How-to Use 
 
 First of all You need at least Powershell V3 installed
-for 2008
-https://blog.adsl2meg.fr/installer-powershell-3-sur-windows-server-2008-r2/
+- https://blog.adsl2meg.fr/installer-powershell-3-sur-windows-server-2008-r2/ 
+and check the web for other server version
 
 Without Powershell V3 ou V4, the script will end
 
@@ -40,7 +40,7 @@ Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRM
 
 3- Execute the script
 First check that .NET and ASP.NET are installed (check fonctionnalities)
-Second check Set-ExecutionPolicy to acces execution of nonsigned scripts (bypass oo remotesigned)
+Second check Set-ExecutionPolicy to acces execution of nonsigned scripts (bypass or remotesigned)
 Start the script in a Powershell session with admin right.
 First time You should see some errors. No problem it's only cause by deleting objects that are not yet created.
 To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error
