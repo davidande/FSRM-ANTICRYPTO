@@ -1,7 +1,7 @@
 ##############################
 # FSRM_NoCrypto_2008.ps1     #
 # W2008 and 2008R2           #
-# may work or no  on 2003R2  #
+# may work en 2003R2         #
 # David ANDE - ALTAE         #
 # WWW.ALTAE.NET              #
 # GNU GENERAL PUBLIC LICENSE #
@@ -29,8 +29,16 @@ if ($powershellVer -le 2)
     exit
 }
 
+
 ########## VARIABLE TO MODIFY #############
+# $wkdir is where the scripts are
+# better using this one
 $wkdir = "C:\FSRMNOCRYPTO"
+
+# $url is where to donwload extensionnlist from
+# don't change if You don't know what You are doing
+$url = "https://fsrm.experiant.ca/api/v1/combined"
+
 ###########################################
 # Drives to exclude for FSRM bloking
 # If You want to exclude complete Path or special directory so write for exemple "C:\share" for  specific share 
@@ -43,11 +51,10 @@ $drive_exclu2 = "0"
 #############################################
 
 # verifying if new crypto extensions available #
+try
+{
+Invoke-WebRequest $url -OutFile $wkdir\extensions.txt
 
-$url = "https://fsrm.experiant.ca/api/v1/get"
-$path = "$wkdir\extensions.txt"
-$client = New-Object System.Net.WebClient
-$client.DownloadFile($url, $path)
 $dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
 
 if (!$dif) { 
@@ -55,6 +62,19 @@ Write-Host "`n####"
 Write-Host "No new extensions to apply - Quit"
 rm $wkdir\extensions.txt
 exit 
+}
+}
+Catch
+{
+Write-Host "`n####"
+Write-Host "Remote extension list Offline - Quit"
+If (Test-Path "$wkdir\extensions.txt")
+{rm $wkdir\extensions.txt}
+
+else
+{
+exit 
+}
 }
 
 ################################ Functions ################################
@@ -158,7 +178,7 @@ $fileScreenName = "ALTAE_CryptoBlockerScreen"
 # $jsonStr = $webClient.DownloadString($url)
 Try
 {
-$jsonStr = Invoke-WebRequest -Uri https://fsrm.experiant.ca/api/v1/get
+$jsonStr = Invoke-WebRequest -Uri $url
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 $ext_filter = Compare-Object $(Get-content "$wkdir\extsbase.txt") $(Get-content "$wkdir\ext_to_accept.txt") -IncludeEqual | where-object {$_.SideIndicator -eq "<="} | select InputObject | select -ExpandProperty InputObject
