@@ -130,6 +130,8 @@ $monitoredExtensions >> "$wkdir\extsbase.txt"
 Catch
 {
 Write-Host Error parsing extension list - Quit
+rm $wkdir\drivesbase.txt
+rm $wkdir\extensions.txt
 exit
 }
 
