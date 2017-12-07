@@ -56,26 +56,27 @@ Try
 {
 # Verifying if new crypto extensions available #
 Invoke-WebRequest $url -OutFile $wkdir\extensions.txt
+
+$dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
+
+if (!$dif) { 
+Write-Host "`n####"
+Write-Host "No new extensions to apply - Quit"
+rm $wkdir\extensions.txt
+exit 
+}
 }
 Catch
 {
-Write-Host Remote extension list Offline - Quit
-exit
+Write-Host "`n####"
+Write-Host "Remote extension list Offline - Quit"
+If (Test-Path "$wkdir\extensions.txt")
+{rm $wkdir\extensions.txt}
+
+else
+{
+exit 
 }
-
-$test = Test-Path $wkdir\extensions.txt
-if (-Not $test) {
-    Write-Host Cannot join the distant extensions list
-    Exit}
-Else {
-    Write-Host Distant extensions list online }
-
-$taille1 = Get-FileHash $wkdir\extensions.txt
-$taille2 = Get-FileHash $wkdir\extensions.old
-if ($taille1.Hash -eq $Taille2.Hash) {
-   Write-Host No New Crypto Extensions available
-    rm $wkdir\extensions.txt
-    Exit
 }
 Write-Host New Crypto extensions available will be added to FSRM
 
