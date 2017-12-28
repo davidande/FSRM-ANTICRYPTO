@@ -61,3 +61,6 @@ https://fsrm.experiant.ca/
 
 http://jpelectron.com/sample/Info%20and%20Documents/Stop%20crypto%20badware%20before%20it%20ruins%20your%20day/1-PreventCrypto-Readme.htm
 
+# IF ERRORS!!! #
+post an issue, I should know some way to make it work fot You
+
