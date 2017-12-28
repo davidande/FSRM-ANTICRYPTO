@@ -64,3 +64,4 @@ http://jpelectron.com/sample/Info%20and%20Documents/Stop%20crypto%20badware%20be
 # IF ERRORS!!! #
 post an issue, I should know some way to make it work fot You
 
+1- make sure to launch Internet Explorer one time on the server and choose parameters when asked (default works)
