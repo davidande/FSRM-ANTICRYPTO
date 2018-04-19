@@ -23,6 +23,9 @@ and check the web for other server version
 
 Without Powershell V3 ou V4, the script will end
 
+You can check that it's works by renaming a file in a share, just change the extension for exemple test.doc -> test.tron
+it will be forbiden.
+You can also follw all attempts in the events log.
 
 1- Installation of FSRM Role
 Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
