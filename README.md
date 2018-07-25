@@ -55,7 +55,8 @@ For the drive extension You can exclude 2 from bloking directly in the script.
 5- Task to update de file
 This scripts can be add as a task to check newer version of extensions list : 
 program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default "C:\FSRMNOCRYPTO\FSRM_NoCrypto_20**.ps1"
+Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default "C:\FSRMNOCRYPTO\FSRM_NoCrypto_20**.ps1".
+
 The task must be launched at least twice a day
 
 # Sources #
