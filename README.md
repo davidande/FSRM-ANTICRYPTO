@@ -15,13 +15,17 @@ This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
 - possibility to exclude shares (excluding some specific shares like usb dongle...) 
 - possibility to stop all shares when attack is detected
 
-# How-to Use 
+# Installation 
 
 First of all You need at least Powershell V3 installed
 - https://blog.adsl2meg.fr/installer-powershell-3-sur-windows-server-2008-r2/ 
 and check the web for other server version
 
 Without Powershell V3 ou V4, the script will end
+
+If You want newer version of powershell You can install 5.1
+https://blog.adsl2meg.fr/installer-powershell-5-1-sur-windows-server-2008-r2-2012-ou-2012-r2/
+
 
 You can check that it's works by renaming a file in a share, just change the extension for exemple test.doc -> test.tron
 it will be forbiden.
@@ -41,7 +45,7 @@ Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRM
 - Readme.md -> this file
 - Licence
 
-3- Execute the script
+3- Running the script
 First check that .NET and ASP.NET are installed (check fonctionnalities)
 Second check Set-ExecutionPolicy to acces execution of nonsigned scripts (bypass or remotesigned)
 Start the script in a Powershell session with admin right.
@@ -58,6 +62,10 @@ program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
 Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default "C:\FSRMNOCRYPTO\FSRM_NOCRYPTO_20**.ps1".
 
 The task must be launched at least twice a day
+
+You can check that it's works by renaming a file in a share, just change the extension for exemple test.doc -> test.tron
+it will be forbiden.
+You can also follw all attempts in the events log.
 
 # Sources #
 https://github.com/kinomakino/ransomware_file_extensions/blob/master/anti_ransomware.ps1
