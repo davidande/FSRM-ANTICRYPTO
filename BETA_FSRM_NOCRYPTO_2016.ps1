@@ -6,15 +6,6 @@
 # GNU GENERAL PUBLIC LICENSE #
 ##############################
 
-# Using FSRM to Block users writing file with a forbiden extension.
-# This scripts can be add as a task to check newer version of extensions list : program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
-# Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default c:\FSRMNOCRYPTO\FSRM_NoCrypto-2016.ps1
-# Before using this script, You have to install FSRM
-# Add Role -> File Services/File Server Ressource Manager
-# Alternative install can be done with the command: Install-WindowsFeature -Name FS-Resource-Manager -IncludeManagementTools
-# if You want to use the mail notification, lunch FSRM.MSC and Right Click on File Server Ressource Manager to configure Mail notification Settings
-# SMTP Server, Default destination mail and sender adress
-# Click on Send a test mail to check settings working and validate
 
 # First of all powershell 3 or higher is needed
 # This scripts is not compatible with Powershell v2
