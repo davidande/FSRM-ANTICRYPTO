@@ -22,7 +22,7 @@ First of all You need at least Powershell V3 installed
 - https://blog.adsl2meg.fr/installer-powershell-3-sur-windows-server-2008-r2/ 
 and check the web for other server version
 
-Without Powershell V3 ou V4, the script will end
+Without Powershell V3 or higher, the script will end
 
 If You want newer version of powershell You can install 5.1
 https://blog.adsl2meg.fr/installer-powershell-5-1-sur-windows-server-2008-r2-2012-ou-2012-r2/
