@@ -6,14 +6,15 @@ A very completelist is maintained by experiant.ca with infos gave by the communi
 Configuring FSRM make impossible to users to write files with forbiden extensions. So We use FSRM to avoid encrypted files to be saved as the extension used by the Crypto Process is Known.
 Those scripts and howto are given as is. Use at your own risck. I will take no responsability for that.
 This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
- Also Thanks to Jpelectron who gave me the idea to go further.
+Also Thanks to Jpelectron who gave me the idea to go further.
  
 # So What!
-- update list of banned extensions (through task manager or manually)
-- configure extensions list, template and applying on shares
-- possibility to exclure extensions from the blocked list (false positive)
-- possibility to exclude shares (excluding some specific shares like usb dongle...) 
-- possibility to stop all shares when attack is detected
+- Update list of banned extensions (through task manager or manually)
+- Configure extensions list, template and applying on shares
+- Possibility to exclure extensions from the blocked list (false positive)
+- Possibility to exclude shares (excluding some specific shares like usb dongle...) 
+- Possibility to stop all shares when attack is detected
+- Possibility to delete passive fsrm screen
 
 # Installation 
 
