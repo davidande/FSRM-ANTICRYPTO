@@ -39,8 +39,8 @@ configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Ses
 
 2- Installation of script
 Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRMNOCRYPTO contain:
-- FSRM_NoCrypto_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2 (and in some case 2012)
-- FSRM_NoCrypto_2016.ps1 -> to be used with Windows Server 2012, 2012 R2 and 2016
+- FSRM_NOCRYPTO_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2 (and in some case 2012)
+- FSRM_NOCRYPTO_2016.ps1 -> to be used with Windows Server 2012, 2012 R2 and 2016
 - extensions.old -> used to compare local en remote extensions list
 - ext_to_accept.txt -> is use to input all the extensions that are in the blocked list but You want to accept
 - Readme.md -> this file
