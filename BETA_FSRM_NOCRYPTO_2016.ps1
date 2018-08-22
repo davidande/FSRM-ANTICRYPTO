@@ -129,7 +129,13 @@ rm $wkdir\extensions.txt
 exit
 }
 
-$ext_filter = Compare-Object $(Get-content "$wkdir\extsbase.txt") $(Get-content "$wkdir\ext_to_accept.txt") -IncludeEqual | where-object {$_.SideIndicator -eq "<="} | select InputObject | select -ExpandProperty InputObject
+# Excuding athorized extensions from list
+$authlist = Get-Content "$wkdir\ext_to_accept.txt" | Where-Object {$_ -notlike "#*"}
+foreach ($authext in $authlist) {
+Write-Host $authext will be exclude of FSRMANTICRYPTO blocking
+Get-Content "$wkdir\extsbase.txt" | Where-Object {$_ -notlike "$Name"} | Out-File "$wkdir\extensionsvraies.txt"
+}
+$ext_filter = Get-Content -path "$wkdir\extensionsvraies.txt"
 
 # Destination mail adress Modify if You use mail notification
 # in the case of Mail Notification check your SMTP setting in the FSRM Options
@@ -161,7 +167,6 @@ Remove-FsrmFileGroup $Name -Confirm:$False
 Write-Host FSRM File group  $Name  Deleted
 }
 # Creating FSRM File Group#
-# Remove-FsrmFileGroup -Name "$fileGroupName" -Confirm:$false
 Write-Host Creating FSRM File Group $fileGroupName
 New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $ext_filter
 
@@ -196,6 +201,7 @@ rm $wkdir\drivesbase.txt
 rm $wkdir\extsbase.txt
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
+rm $wkdir\extensionsvraies.txt
 echo Finish
 
 Exit 
