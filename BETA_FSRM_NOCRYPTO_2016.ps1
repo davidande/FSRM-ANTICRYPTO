@@ -1,6 +1,6 @@
 ##############################
 # FSRM_NoCrypto_2016.ps1     #
-# W2012, 2012R2 and 2016     #
+# W2012, 2012R2 2016 2019    #
 # David ANDE - ALTAE         #
 # WWW.ALTAE.NET              #
 # GNU GENERAL PUBLIC LICENSE #
@@ -53,7 +53,7 @@ $delpassive = "1"
 Try
 {
 # Verifying if new crypto extensions available #
-Invoke-WebRequest $url -OutFile $wkdir\extensions.txt
+Invoke-WebRequest $url -OutFile $wkdir\extensions.txt -UseBasicParsing
 
 $dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
 
@@ -121,7 +121,7 @@ function ConvertFrom-Json20([Object] $obj)
 
 Try
 {
-$jsonStr = Invoke-WebRequest -Uri $url
+$jsonStr = Invoke-WebRequest -Uri $url -UseBasicParsing
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 }
