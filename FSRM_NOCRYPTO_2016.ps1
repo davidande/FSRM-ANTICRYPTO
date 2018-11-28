@@ -46,7 +46,7 @@ $drive_exclu2 = "0"
 Try
 {
 # Verifying if new crypto extensions available #
-Invoke-WebRequest $url -OutFile $wkdir\extensions.txt
+Invoke-WebRequest $url -OutFile $wkdir\extensions.txt -UseBasicParsing
 
 $dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
 
@@ -114,7 +114,7 @@ function ConvertFrom-Json20([Object] $obj)
 # $jsonStr = $webClient.DownloadString("https://fsrm.experiant.ca/api/v1/combined")
 Try
 {
-$jsonStr = Invoke-WebRequest -Uri $url
+$jsonStr = Invoke-WebRequest -Uri $url -UseBasicParsing
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 $monitoredExtensions >> "$wkdir\extsbase.txt"
 }
