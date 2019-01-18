@@ -45,14 +45,25 @@ $drive_exclu2 = "0"
 #############################################
 If ((Test-Path "$wkdir\extensions.old") -eq $True) 
     {
-        Write-Host "fichier extensions.old est présent"
+        Write-Host "extensions.old founded"
     } 
 else 
     {
         New-Item "$wkdir\extensions.old"
         Add-Content -path "$wkdir\extensions.old" -value "exemple"
-        Start-Sleep -s 3
         
+    }
+
+$taille = Get-Item "$wkdir\extensions.old" | Select Mode,Length | Select -ExpandProperty Length
+
+If ($taille -lt 1) 
+    {
+        Add-Content -path "$wkdir\extensions.old" -value "exemple"
+        Write-Host "Extensions.old fixed"
+    }
+else
+    {
+        Write-Host "extensions.old not empty Good"
     }
 Try
 {
