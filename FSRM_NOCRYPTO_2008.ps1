@@ -40,7 +40,18 @@ $url = "https://fsrm.experiant.ca/api/v1/get"
 $drive_exclu1 = "0"
 $drive_exclu2 = "0"
 #############################################
-
+If ((Test-Path "$wkdir\extensions.old") -eq $True) 
+    {
+        Write-Host "fichier extensions.old est présent"
+    } 
+else 
+    {
+        New-Item "$wkdir\extensions.old"
+        Add-Content -path "$wkdir\extensions.old" -value "exemple"
+        Start-Sleep -s 3
+        
+    }
+    
 # verifying if new crypto extensions available #
 try
 {
