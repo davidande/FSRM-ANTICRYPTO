@@ -43,6 +43,17 @@ $fileScreenName = "ALTAE_FiltreBlocker_Crypto"
 $drive_exclu1 = "0"
 $drive_exclu2 = "0"
 #############################################
+If ((Test-Path "$wkdir\extensions.old") -eq $True) 
+    {
+        Write-Host "fichier extensions.old est présent"
+    } 
+else 
+    {
+        New-Item "$wkdir\extensions.old"
+        Add-Content -path "$wkdir\extensions.old" -value "exemple"
+        Start-Sleep -s 3
+        
+    }
 Try
 {
 # Verifying if new crypto extensions available #
