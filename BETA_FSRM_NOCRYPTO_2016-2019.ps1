@@ -56,7 +56,7 @@ If ((Test-Path "$wkdir\extensions.old") -eq $True)
     } 
 else 
     {
-        New-Item -ItemType "file""$wkdir\extensions.old"
+        New-Item -ItemType "file" "$wkdir\extensions.old"
         Add-Content -path "$wkdir\extensions.old" -value "exemple"
         
     }
