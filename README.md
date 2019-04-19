@@ -13,7 +13,7 @@ Also Thanks to Jpelectron who gave me the idea to go further.
 - Configure extensions list, template and applying on shares
 - Possibility to exclure extensions from the blocked list (false positive)
 - Possibility to exclude shares (excluding some specific shares like usb dongle...) 
-- Possibility to stop all shares when attack is detected
+- Possibility to stop all shares when attack is detected or/and write event
 - Possibility to delete passive fsrm screen
 
 # Installation 
