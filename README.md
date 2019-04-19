@@ -40,9 +40,9 @@ configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Ses
 2- Installation of script
 Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRMNOCRYPTO contain:
 - FSRM_NOCRYPTO_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2 (and in some case 2012)
-- FSRM_NOCRYPTO_2016.ps1 -> to be used with Windows Server 2012, 2012 R2, 2016 and 2019 Preview
-- extensions.old -> used to compare local en remote extensions list
-- ext_to_accept.txt -> is use to input all the extensions that are in the blocked list but You want to accept
+- FSRM_NOCRYPTO_2012_to_2019.ps1 -> to be used with Windows Server 2012, 2012 R2, 2016 and 2019
+- share_to_accept -> used to input all shares that will bypass the filtering
+- ext_to_accept.txt -> used to input all the extensions that are in the blocked list but You want to accept
 - Readme.md -> this file
 - Licence
 
@@ -54,19 +54,21 @@ First time You should see some errors. No problem it's only cause by deleting ob
 To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error
 
 4- Drive and extension exclusion. 
-As some program use certain type of extension that are known to be ine the ransomware list, You can put the list of extensions to bypass the FSRM blocking filter in the file est_to_accept.txt
-For the drive extension You can exclude 2 from bloking directly in the script.
+As some program use certain type of extension that are known to be ine the ransomware list, You can put the list of extensions to bypass the FSRM blocking filter in the file ext_to_accept.txt
+For the drive extension do the same in share_to_accept.txt.
 
 5- Task to update de file
 This scripts can be add as a task to check newer version of extensions list : 
 program: c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe
 Arguments to add: -noprofile  -executionpolicy Unrestricted -file "where is this script" default "C:\FSRMNOCRYPTO\FSRM_NOCRYPTO_20**.ps1".
 
-The task must be launched at least twice a day
+The task must be launched at least twice a day. In my case I made a task every hour.
 
 You can check that it's works by renaming a file in a share, just change the extension for exemple test.doc -> test.tron
 it will be forbiden.
 You can also follw all attempts in the events log.
+
+For maintenance use if you want to stop the fsrm service: Stop-Service SrmSvc
 
 # Sources #
 https://github.com/kinomakino/ransomware_file_extensions/blob/master/anti_ransomware.ps1
