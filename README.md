@@ -28,10 +28,6 @@ If You want newer version of powershell You can install 5.1
 https://blog.adsl2meg.fr/installer-powershell-5-1-sur-windows-server-2008-r2-2012-ou-2012-r2/
 
 
-You can check that it's works by renaming a file in a share, just change the extension for exemple test.doc -> test.tron
-it will be forbiden.
-You can also follw all attempts in the events log.
-
 1- Installation of FSRM Role
 Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
 As sometime Windows file manager is configured in Case sensitive, you have to
@@ -51,7 +47,7 @@ First check that .NET and ASP.NET are installed (check fonctionnalities)
 Second check Set-ExecutionPolicy to acces execution of nonsigned scripts (bypass or remotesigned)
 Start the script in a Powershell session with admin right.
 First time You should see some errors. No problem it's only cause by deleting objects that are not yet created.
-To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error
+To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error.
 
 4- Drive and extension exclusion. 
 As some program use certain type of extension that are known to be ine the ransomware list, You can put the list of extensions to bypass the FSRM blocking filter in the file ext_to_accept.txt
