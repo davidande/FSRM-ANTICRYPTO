@@ -29,7 +29,7 @@ https://blog.adsl2meg.fr/installer-powershell-5-1-sur-windows-server-2008-r2-201
 
 
 1- Installation of FSRM Role
-Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager
+Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager.
 As sometime Windows file manager is configured in Case sensitive, you have to
 configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel obcaseinsensitive is set to 1
 
