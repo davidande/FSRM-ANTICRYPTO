@@ -37,7 +37,7 @@ configure it by checking HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Ses
 Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRMNOCRYPTO contain:
 - FSRM_NOCRYPTO_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2 (and in some case 2012)
 - FSRM_NOCRYPTO_2012_to_2019.ps1 -> to be used with Windows Server 2012, 2012 R2, 2016 and 2019
-- share_to_accept -> used to input all shares that will bypass the filtering
+- share_to_accept.txt -> used to input all shares that will bypass the filtering
 - ext_to_accept.txt -> used to input all the extensions that are in the blocked list but You want to accept
 - Readme.md -> this file
 - Licence
