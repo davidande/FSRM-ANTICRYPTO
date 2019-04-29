@@ -97,7 +97,13 @@ Write-Host "`n"
 $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -match  '0|2147483648' } | Select -ExpandProperty Path | Select -Unique
 $exclShares= Get-Content $wkdir\share_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
 $monitoredShares = $drivesContainingShares | Where-Object { $exclShares -notcontains $_ }
-Write-Host "Shares bypassing filtering $exclShares"
+if (!$exclShares) {
+Write-Host "Shares bypassing filtering is empty"
+}
+else {
+
+Write-Host "Shares bypassing filtering : $exclShares"
+}
 
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
@@ -134,7 +140,14 @@ exit
 
 $exclExtensions= Get-Content $wkdir\ext_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
 $monitoredExtensions = $monitoredExtensions | Where-Object { $exclExtensions -notcontains $_ }
-Write-Host "Extensions bypassing filtering $exclExtensions"
+if (!$exclExtensions) {
+Write-Host "Extensions bypassing filtering is empty"
+}
+else {
+
+Write-Host "Extensions bypassing filtering : $exclExtensions"
+}
+
 
 Write-Host "`n####"
 # Destination mail adress Modify if You use mail notification
