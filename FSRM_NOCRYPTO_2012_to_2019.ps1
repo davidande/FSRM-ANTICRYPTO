@@ -95,22 +95,9 @@ Write-Host "`n"
 
 # Listing all shared drives#
 $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Where-Object { $_.Type -match  '0|2147483648' } | Select -ExpandProperty Path | Select -Unique
-
-# Deleting shares to bypass filtering
-# All shares You want to bypass the filtering must be in share_to_accept.txt
-$drivesContainingShares >> "$wkdir\drivesbase.txt"
-$authshare = Get-Content "$wkdir\share_to_accept.txt" | Where-Object {$_ -notlike "#*"}
-if ($authshare) {
-foreach ($authdrive in $authshare) {
-Write-Host $authdrive will pass trought FSRMANTICRYPTO filtering
-Get-Content "$wkdir\drivesbase.txt" | Where-Object {$_ -notlike "$authdrive"} | Out-File "$wkdir\Finalshares.txt"
-}
-}
-else
-{
-Get-Content "$wkdir\drivesbase.txt" | Out-File "$wkdir\Finalshares.txt"
-}
-
+$exclShares= Get-Content $wkdir\share_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
+$monitoredShares = $drivesContainingShares | Where-Object { $exclShares -notcontains $_ }
+Write-Host "Shares bypassing filtering $exclShares"
 
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
@@ -140,15 +127,14 @@ $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 Catch
 {
 Write-Host Error parsing extension list - Quit
-rm $wkdir\drivesbase.txt
 rm $wkdir\extensions.txt
-rm $wkdir\Finalshares.txt
+# rm $wkdir\Finalshares.txt
 exit
 }
 
 $exclExtensions= Get-Content $wkdir\ext_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
 $monitoredExtensions = $monitoredExtensions | Where-Object { $exclExtensions -notcontains $_ }
-Write-Host "Extensions bypassing filtering: $exclExtensions"
+Write-Host "Extensions bypassing filtering $exclExtensions"
 
 Write-Host "`n####"
 # Destination mail adress Modify if You use mail notification
@@ -192,8 +178,7 @@ Write-Host Creating FSRM File Template $fileTemplateName including $fileGroupNam
 New-FsrmFileScreenTemplate -Name "$fileTemplateName" -Active:$True -IncludeGroup "$fileGroupName" -Notification $EventNotification
 
 # Creating FSRM File Screen #
-$final_shares = Get-Content -path "$wkdir\finalshares.txt"
-foreach ($share in $final_shares) {
+foreach ($share in $monitoredShares) {
 New-FsrmFileScreen -Path $share -Active:$true -Description "$fileScreenName" -IncludeGroup "$filegroupname" -Template "$fileTemplateName"
 Write-Host Share File Screen $share based on $fileTemplateName for the extensions list group $fileGroupName has been created
 Write-Host "`n####"
@@ -214,10 +199,8 @@ Write-host FSRM Keeping Passive Protection Shares
 # Keeping list to compare next #
 #time with new one 
 rm $wkdir\extensions.old
-rm $wkdir\drivesbase.txt
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
-rm $wkdir\Finalshares.txt
 Write-Host "`n"
 echo Finish
 
