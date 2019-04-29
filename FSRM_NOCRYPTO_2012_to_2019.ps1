@@ -150,7 +150,7 @@ exit
 $authlist = Get-Content "$wkdir\ext_to_accept.txt" | Where-Object {$_ -notlike "#*"}
 if($authlist) {
 foreach ($authext in $authlist) {
-Write-Host $authext will be exclude of FSRMANTICRYPTO blocking
+Write-Host "$authext will be excluded from FSRMANTICRYPTO blocking"
 Get-Content "$wkdir\extsbase.txt" | Where-Object {$_ -notlike "$Name"} | Out-File "$wkdir\extensionsvraies.txt"
 }
 }
