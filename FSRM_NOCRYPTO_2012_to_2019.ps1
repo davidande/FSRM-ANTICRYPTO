@@ -20,7 +20,9 @@ if ($powershellVer -le 2)
     exit
 }
 
+###########################################
 ########## VARIABLE TO MODIFY #############
+###########################################
 # $wkdir is where the scripts are
 # better using this one
 $wkdir = "C:\FSRMNOCRYPTO"
