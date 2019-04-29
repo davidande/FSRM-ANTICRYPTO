@@ -136,7 +136,6 @@ Try
 {
 $jsonStr = Invoke-WebRequest -Uri $url -UseBasicParsing
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
-$monitoredExtensions >> "$wkdir\extsbase.txt"
 }
 Catch
 {
@@ -147,19 +146,10 @@ rm $wkdir\Finalshares.txt
 exit
 }
 
-$authlist = Get-Content "$wkdir\ext_to_accept.txt" | Where-Object {$_ -notlike "#*"}
-if($authlist) {
-foreach ($authext in $authlist) {
-Write-Host "$authext will be excluded from FSRMANTICRYPTO blocking"
-Get-Content "$wkdir\extsbase.txt" | Where-Object {$_ -notlike "$Name"} | Out-File "$wkdir\extensionsvraies.txt"
-}
-}
-else {
-Get-Content "$wkdir\extsbase.txt" | Out-File "$wkdir\extensionsvraies.txt"
-Write-Host no extension present in ext_to_accept.txt to authorize
-}
+$exclExtensions= Get-Content $wkdir\ext_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
+$monitoredExtensions = $monitoredExtensions | Where-Object { $exclExtensions -notcontains $_ }
+Write-Host "Extensions bypassing filtering: $exclExtensions"
 
-$ext_filter = Get-Content -path "$wkdir\extensionsvraies.txt"
 Write-Host "`n####"
 # Destination mail adress Modify if You use mail notification
 # in the case of Mail Notification check your SMTP setting in the FSRM Options
@@ -193,7 +183,7 @@ Write-Host FSRM File group  $Name  Deleted
 # Creating FSRM File Group#
 # Remove-FsrmFileGroup -Name "$fileGroupName" -Confirm:$false
 Write-Host Creating FSRM File Group $fileGroupName
-New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $ext_filter
+New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $monitoredExtensions
 
 # Creating FSRM File Template #
 # You Can modify the Notification to add the command to execute in case of violation
@@ -225,10 +215,8 @@ Write-host FSRM Keeping Passive Protection Shares
 #time with new one 
 rm $wkdir\extensions.old
 rm $wkdir\drivesbase.txt
-rm $wkdir\extsbase.txt
 cp $wkdir\extensions.txt $wkdir\extensions.old
 rm $wkdir\extensions.txt
-rm $wkdir\extensionsvraies.txt
 rm $wkdir\Finalshares.txt
 Write-Host "`n"
 echo Finish
