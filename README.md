@@ -79,3 +79,4 @@ post an issue, I should know some way to make it work fot You
 
 1- make sure to launch Internet Explorer one time on the server and choose parameters when asked (default works)
 2- if you just installed FSRM role, reboot the server
+3- fsrmnocrypto does not work on w2019 DC (it's a Microsoft bug.. or limitation)
