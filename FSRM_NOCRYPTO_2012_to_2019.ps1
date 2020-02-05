@@ -20,12 +20,10 @@ if ($powershellVer -le 2)
     exit
 }
 
-###########################################
 ########## VARIABLE TO MODIFY #############
-###########################################
-# $wkdir is where the scripts are
+# $PSScriptRoot is where the scripts are
 # better using this one
-$wkdir = "C:\FSRMNOCRYPTO"
+# $PSScriptRoot = "C:\FSRMNOCRYPTO"
 
 # $url is where to donwload extensionnlist from
 # don't change if You don't know what You are doing
@@ -44,22 +42,22 @@ $delpassive = "0"
 #############################################
 
 # First test that extensions.old is present and not empty ans online extensions list is reachable
-If ((Test-Path "$wkdir\extensions.old") -eq $True) 
+If ((Test-Path "$PSScriptRoot\extensions.old") -eq $True) 
     {
         Write-Host "extensions.old founded"
     } 
 else 
     {
-        New-Item -ItemType "file" "$wkdir\extensions.old"
-        Add-Content -path "$wkdir\extensions.old" -value "exemple"
+        New-Item -ItemType "file" "$PSScriptRoot\extensions.old"
+        Add-Content -path "$PSScriptRoot\extensions.old" -value "exemple"
         
     }
 
-$taille = Get-Item "$wkdir\extensions.old" | Select Mode,Length | Select -ExpandProperty Length
+$taille = Get-Item "$PSScriptRoot\extensions.old" | Select Mode,Length | Select -ExpandProperty Length
 
 If ($taille -lt 1) 
     {
-        Add-Content -path "$wkdir\extensions.old" -value "exemple"
+        Add-Content -path "$PSScriptRoot\extensions.old" -value "exemple"
         Write-Host "Extensions.old fixed"
     }
 else
@@ -69,15 +67,15 @@ else
 Try
 {
 # Verifying if new crypto extensions available #
-Invoke-WebRequest $url -OutFile $wkdir\extensions.txt -UseBasicParsing
+Invoke-WebRequest $url -OutFile $PSScriptRoot\extensions.txt -UseBasicParsing
 
-$dif = compare-object -referenceobject $(get-content "$wkdir\extensions.txt") -differenceobject $(get-content "$wkdir\extensions.old")
+$dif = compare-object -referenceobject $(get-content "$PSScriptRoot\extensions.txt") -differenceobject $(get-content "$PSScriptRoot\extensions.old")
 
 if (!$dif) { 
 
 Write-Host "No new extensions to apply - Quit"
 
-rm $wkdir\extensions.txt
+rm $PSScriptRoot\extensions.txt
 exit 
 }
 }
@@ -86,8 +84,8 @@ Catch
 
 Write-Host "Remote extension list Offline - Quit"
 
-If (Test-Path "$wkdir\extensions.txt")
-{rm $wkdir\extensions.txt}
+If (Test-Path "$PSScriptRoot\extensions.txt")
+{rm $PSScriptRoot\extensions.txt}
 
 else
 {
@@ -103,7 +101,8 @@ $drivesContainingShares = Get-WmiObject Win32_Share | Select Name,Path,Type | Wh
 
 # Excluding shares present in share_to_accept.txt
 
-$exclShares= Get-Content $wkdir\share_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
+$exclShares= Get-Content $PSScriptRoot\share_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
+
 $monitoredShares = $drivesContainingShares | Where-Object { $exclShares -notcontains $_ }
 if (!$exclShares) {
 
@@ -111,6 +110,7 @@ Write-Host "Shares bypassing filtering is empty"
 
 }
 else {
+
 
 Write-Host "Shares bypassing filtering : $exclShares"
 
@@ -146,13 +146,13 @@ Catch
 
 Write-Host Error parsing extension list - Quit
 
-rm $wkdir\extensions.txt
+rm $PSScriptRoot\extensions.txt
 exit
 }
 
 # excluding from the filtered extension list ext_to_accept.txt
 
-$exclExtensions= Get-Content $wkdir\ext_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
+$exclExtensions= Get-Content $PSScriptRoot\ext_to_accept.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
 $monitoredExtensions = $monitoredExtensions | Where-Object { $exclExtensions -notcontains $_ }
 if (!$exclExtensions) {
 
@@ -165,6 +165,21 @@ Write-Host "Extensions bypassing filtering : $exclExtensions"
 
 }
 
+
+#Including extension manually from the extension list ext_to_include.txt
+
+$InclExtensions= Get-Content $PSScriptRoot\ext_to_include.txt | ForEach-Object { $_.Trim() } | Where-Object {$_ -notlike "#*"}
+$monitoredExtensions = $monitoredExtensions + $Inclextensions
+if (!$InclExtensions) {
+
+Write-Host "Extensions in ext_to_include.txt is empty"
+
+}
+else {
+
+Write-Host "Extensions in ext_to_include.txt added : $inclExtensions"
+
+}
 
 # Destination mail adress Modify if You use mail notification
 # in the case of Mail Notification check your SMTP setting in the FSRM Options
@@ -203,7 +218,7 @@ Write-Host FSRM File group  $Name  Deleted
 
 Write-Host Creating FSRM File Group $fileGroupName
 
-New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $monitoredExtensions
+New-FsrmFileGroup -Name "$fileGroupName" -IncludePattern $monitoredExtensions |Out-Null
 
 # Creating FSRM File Template #
 # You Can modify the Notification to add the command to execute in case of violation
@@ -237,9 +252,9 @@ Write-host FSRM Keeping Passive Protection Shares
 }
 # Keeping list to compare next #
 #time with new one 
-rm $wkdir\extensions.old
-cp $wkdir\extensions.txt $wkdir\extensions.old
-rm $wkdir\extensions.txt
+rm $PSScriptRoot\extensions.old
+cp $PSScriptRoot\extensions.txt $PSScriptRoot\extensions.old
+rm $PSScriptRoot\extensions.txt
 Write-Host "`n"
 echo Finish
 
