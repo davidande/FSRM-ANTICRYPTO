@@ -39,6 +39,7 @@ Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRM
 - FSRM_NOCRYPTO_2012_to_2019.ps1 -> to be used with Windows Server 2012, 2012 R2, 2016 and 2019
 - share_to_accept.txt -> used to input all shares that will bypass the filtering
 - ext_to_accept.txt -> used to input all the extensions that are in the blocked list but You want to accept
+- ext_to_exclude.txt -> used to input all the extensions that are NOT in the bloked list but You want to block
 - Readme.md -> this file
 - Licence
 
