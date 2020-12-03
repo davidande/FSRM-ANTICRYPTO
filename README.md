@@ -5,7 +5,7 @@ Use FSRM-ANTICRYPTO to protect your Windows servers against Crypto attacks and k
 A very complete list of extensions used by ransomwares is maintained by experiant.ca with infos gave by the community. Check-it at https://fsrm.experiant.ca.
 Configuring FSRM make impossible to users to write files with forbiden extensions. So We use FSRM to avoid encrypted files to be saved as the extension used by the Crypto Process is Known.
 **Those scripts and how-to are given as is. Use at your own risck. I will take no responsability for that.**
-This work is heavily based on Kinomakino and Nexxai on Github. Big hug!
+This work is heavily based on Kinomakino and @Nexxai on Github. Big hug!
 Also Thanks to Jpelectron who gave me the idea to go further.
  
 # So What!
@@ -66,6 +66,14 @@ it will be forbiden.
 You can also follw all attempts in the events log.
 
 For maintenance use if you want to stop the fsrm service: **Stop-Service SrmSvc**
+
+## 6- Passive FSRM screens
+FSRM cannot be used on administrative shares. it will only publish an event in the event log.
+As it is just informational, i give the choice to use or not passvive FSRM screens.
+By default it is used ans will will see them in the FSRM screen Tab.
+If you Want to ignore passive screens just change in the script line 41:
+$delpassive = "0" and set it to **$delpassive = "1"**
+
 
 # Sources #
 https://github.com/kinomakino/ransomware_file_extensions/blob/master/anti_ransomware.ps1
