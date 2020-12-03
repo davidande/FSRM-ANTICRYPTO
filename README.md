@@ -5,7 +5,7 @@ Use FSRM-ANTICRYPTO to protect your Windows servers against Crypto attacks and k
 A very complete list of extensions used by ransomwares is maintained by experiant.ca with infos gave by the community. Check-it at https://fsrm.experiant.ca.
 Configuring FSRM make impossible to users to write files with forbiden extensions. So We use FSRM to avoid encrypted files to be saved as the extension used by the Crypto Process is Known.
 **Those scripts and how-to are given as is. Use at your own risck. I will take no responsability for that.**
-This work is heavily based on Kinomakino and @Nexxai on Github. Big hug!
+This work is heavily based on Kinomakino and @github.com/nexxai on Github. Big hug!
 Also Thanks to Jpelectron who gave me the idea to go further.
  
 # So What!
