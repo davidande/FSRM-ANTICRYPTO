@@ -23,7 +23,7 @@ if ($powershellVer -le 2)
 ########## VARIABLE TO MODIFY #############
 # $PSScriptRoot is where the scripts are
 # better using this one
-$PSScriptRoot = "C:\FSRMNOCRYPTO"
+# $PSScriptRoot = "C:\FSRMNOCRYPTO"
 
 # $url is where to donwload extensionnlist from
 # don't change if You don't know what You are doing
