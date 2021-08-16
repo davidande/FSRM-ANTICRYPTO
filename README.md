@@ -33,6 +33,8 @@ Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manag
 As sometime Windows file manager is configured in Case sensitive, you have to
 configure it by checking **HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel obcaseinsensitive is set to 1**
 
+**After installation of FRSM role on a VM it's important to reboot almost 2 times** otherwise some Powershell commands will not be active.
+
 ## 2- Installation of script
 Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRMNOCRYPTO contain:
 - FSRM_NOCRYPTO_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2 (and in some case 2012)
@@ -70,7 +72,6 @@ For maintenance use if you want to stop the fsrm service: **Stop-Service SrmSvc*
 ## 6- Passive FSRM screens
 FSRM cannot be used on administrative shares. it will only publish an event in the event log.
 As it is just informational, i give the choice to use or not passvive FSRM screens.
-By default it is used ans will will see them in the FSRM screen Tab.
 If you Want to ignore passive screens just change in the script line 41:
 $delpassive = "0" and set it to **$delpassive = "1"**
 
@@ -83,8 +84,12 @@ https://fsrm.experiant.ca/
 http://jpelectron.com/sample/Info%20and%20Documents/Stop%20crypto%20badware%20before%20it%20ruins%20your%20day/1-PreventCrypto-Readme.htm
 
 # IF ERRORS!!! #
-post an issue, I should know some way to make it work fot You
+post an issue, I should know some way to make it work for You
 
 1- make sure to launch Internet Explorer one time on the server and choose parameters when asked (default works)
+
 2- if you just installed FSRM role, reboot the server
+
 3- always run the script as an administrator
+
+4- Reboot almost 2 times after FRSM installation on VM
