@@ -92,4 +92,4 @@ post an issue, I should know some way to make it work for You
 
 3- always run the script as an administrator
 
-4- Reboot almost 2 times after FRSM installation on VM
+4- Reboot almost 2 times after FRSM installation on Windows Virtual Machine (don't ask me why!!!)
