@@ -38,7 +38,7 @@ configure it by checking **HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\S
 ## 2- Installation of script
 Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRMNOCRYPTO contain:
 - FSRM_NOCRYPTO_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2 (and in some case 2012)
-- FSRM_NOCRYPTO_2012_to_2019.ps1 -> to be used with Windows Server 2012, 2012 R2, 2016 and 2019
+- FSRM_NOCRYPTO_2012_to_2022.ps1 -> to be used with Windows Server 2012, 2012 R2, 2016, 2019 and 2022
 - share_to_accept.txt -> used to input all shares that will bypass the filtering
 - ext_to_accept.txt -> used to input all the extensions that are in the blocked list but You want to accept
 - ext_to_exclude.txt -> used to input all the extensions that are NOT in the bloked list but You want to block (not working for w2008)
