@@ -253,6 +253,7 @@ Write-host FSRM Keeping Passive Protection Shares
 }
 # Keeping list to compare next #
 #time with new one 
+
 rm $PSScriptRoot\extensions.old
 cp $PSScriptRoot\extensions.txt $PSScriptRoot\extensions.old
 rm $PSScriptRoot\extensions.txt
