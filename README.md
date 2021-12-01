@@ -1,7 +1,7 @@
 # FSRM-ANTICRYPTO
 Protect servers against crypto attacks
 
-Use FSRM-ANTICRYPTO to protect your Windows servers against Crypto attacks and keep the Crypto filegroup extensions up to date.
+Use FSRM-ANTICRYPTO to protect your Windows files servers against Crypto attacks and keep the Crypto filegroup extensions up to date.
 A very complete list of extensions used by ransomwares is maintained by experiant.ca with infos gave by the community. Check-it at https://fsrm.experiant.ca.
 Configuring FSRM make impossible to users to write files with forbiden extensions. So We use FSRM to avoid encrypted files to be saved as the extension used by the Crypto Process is Known.
 **Those scripts and how-to are given as is. Use at your own risck. I will take no responsability for that.**
@@ -73,7 +73,7 @@ For maintenance use if you want to stop the fsrm service: **Stop-Service SrmSvc*
 FSRM cannot be used on administrative shares. it will only publish an event in the event log.
 As it is just informational, i give the choice to use or not passvive FSRM screens.
 If you Want to ignore passive screens just change in the script line 41:
-$delpassive = "0" and set it to **$delpassive = "1"**
+$delpassive = "0" and set it to **$delpassive = "1"**  (default is 1)
 
 
 # Sources #
