@@ -2,8 +2,7 @@
 # FSRM_NOCRYPTO_2012_to_2022 #
 # W2012, w2012R2 w2016 w2019 #
 # W2022                      #
-# David ANDE - ALTAE         #
-# WWW.ALTAE.NET              #
+# David ANDE                 #
 # GNU GENERAL PUBLIC LICENSE #
 ##############################
 
