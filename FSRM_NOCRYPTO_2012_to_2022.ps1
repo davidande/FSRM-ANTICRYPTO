@@ -30,9 +30,9 @@ if ($powershellVer -le 2)
 $url = "https://fsrm.experiant.ca/api/v1/get"
 
 # Group Name in FSRM #
-$fileGroupName = "ALTAE_CryptoBlocker_extensions"
-$fileTemplateName = "ALTAE_TemplateBlocker_Crypto"
-$fileScreenName = "ALTAE_FiltreBlocker_Crypto"
+$fileGroupName = "Crypto_Blocker_extensions"
+$fileTemplateName = "Crypto_Blocker_Template"
+$fileScreenName = "Crypto_Blocker_Filter"
 
 # Define if you want to keep passive protection shares.
 # Passive protection shares allow writing forbidden extension but generate an event log
@@ -118,8 +118,8 @@ Write-Host "Shares bypassing filtering : $exclShares"
 
 
 # Command to be lunch in case of violation of Anticrypto FSRM rules #
-# defdault rule is non but You can use this one by adding 
-# $Command to the notification in the Template
+# defdault rule is only notification but You can use this one by adding 
+# $Command to the notification in the Template (add "-Command $command" in line 228)
 # This command stop lanmaserver to stop all shares
 # To restart the service use the comman "net start lanmanserver"
 $Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" -CommandParameters "/c net stop lanmanserver /y" -SecurityLevel LocalSystem -KillTimeOut 0
