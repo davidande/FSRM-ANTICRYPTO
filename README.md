@@ -16,7 +16,7 @@ Also Thanks to Jpelectron who gave me the idea to go further.
 - Possibility to stop all shares when attack is detected or/and write event
 - Possibility to delete passive fsrm screen
 
-# Installation 
+# Install
 
 First of all You need at least Powershell V3 installed
 - https://blog.adsl2meg.fr/installer-powershell-3-sur-windows-server-2008-r2/ 
@@ -28,14 +28,14 @@ If You want newer version of powershell You can install 5.1
 https://blog.adsl2meg.fr/installer-powershell-5-1-sur-windows-server-2008-r2-2012-ou-2012-r2/
 
 
-## 1- Installation of FSRM Role
+## 1- Install of FSRM Role
 Install FSRM on Yor server: Add-Role->File Service ->File Server Ressource Manager.
 As sometime Windows file manager is configured in Case sensitive, you have to
 configure it by checking **HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Kernel obcaseinsensitive is set to 1**
 
 **After installation of FRSM role on a VM it's important to reboot almost 2 times** otherwise some Powershell commands will not be active.
 
-## 2- Installation of script
+## 2- Install of script
 Download the FSRMNOCRYPTO.ZIP and UnZip only files to C:\FSRMNOCRYPTO so C:\FSRMNOCRYPTO contain:
 - FSRM_NOCRYPTO_2008.ps1 -> to be used with Windows Server 2008 and 2008 R2 (and in some case 2012)
 - FSRM_NOCRYPTO_2012_to_2022.ps1 -> to be used with Windows Server 2012, 2012 R2, 2016, 2019 and 2022
@@ -52,11 +52,11 @@ Start the script in a Powershell session with admin right.
 First time You should see some errors. No problem it's only cause by deleting objects that are not yet created.
 To check if everything is ok, just empty the extensions.old and lunch the script again. This time You should See no error.
 
-## 4- Drive and extension exclusion. 
+## 4- Shares and extensions exclusion. 
 As some program use certain type of extension that are known to be ine the ransomware list, You can put the list of extensions to bypass the FSRM blocking filter in the file ext_to_accept.txt
 For the drive extension do the same in share_to_accept.txt.
 
-## 5- Task to update de file
+## 5- Task to update the list of extensions
 This scripts can be add as a task to check newer version of extensions list : 
 program: **c:\windows\system32\windowsPowerShell\v1.0\Powershell.exe**
 Arguments to add: **-noprofile  -executionpolicy Unrestricted -file "where is this script" default "C:\FSRMNOCRYPTO\FSRM_NOCRYPTO_20XXX.ps1"**.
