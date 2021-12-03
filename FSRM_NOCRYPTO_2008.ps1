@@ -181,9 +181,9 @@ echo finish
 Write-Host "The following shares needing to be protected: $($drivesContainingShares -Join ",")"
 
 
-$fileGroupName = "ALTAE_CryptoBlocker_extensions"
-$fileTemplateName = "ALTAE_CryptoBlocker_Template"
-$fileScreenName = "ALTAE_CryptoBlockerScreen"
+$fileGroupName = "CryptoBlocker_extensions"
+$fileTemplateName = "CryptoBlocker_Template"
+$fileScreenName = "Crypto_Blocker_Filter"
 
 # old download method
 # $webClient = New-Object System.Net.WebClient
