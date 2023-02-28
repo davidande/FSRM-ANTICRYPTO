@@ -27,7 +27,8 @@ if ($powershellVer -le 2)
 
 # $url is where to donwload extensionnlist from
 # don't change if You don't know what You are doing
-$url = "https://fsrm.experiant.ca/api/v1/get"
+# $url = "https://fsrm.experiant.ca/api/v1/get"
+$url = "https://raw.githubusercontent.com/DFFspace/CryptoBlocker/master/KnownExtensions.txt"
 
 # Group Name in FSRM #
 $fileGroupName = "Crypto_Blocker_extensions"
