@@ -31,8 +31,8 @@ if ($powershellVer -le 2)
 # $url is where to donwload extensionnlist from
 # don't change if You don't know what You are doing
 # updated cause not update anymore from experiant
-# $url = "https://fsrm.experiant.ca/api/v1/get"
-$url = "https://raw.githubusercontent.com/DFFspace/CryptoBlocker/master/KnownExtensions.txt"
+$url = "https://fsrm.experiant.ca/api/v1/get"
+# $url = "https://raw.githubusercontent.com/DFFspace/CryptoBlocker/master/KnownExtensions.txt"
 
 # Group Name in FSRM #
 $fileGroupName = "Crypto_Blocker_extensions"
