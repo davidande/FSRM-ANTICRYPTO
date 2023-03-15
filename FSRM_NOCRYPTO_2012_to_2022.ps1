@@ -20,6 +20,9 @@ if ($powershellVer -le 2)
     exit
 }
 
+# Force TLS1.2 to download files from Internet
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 ########## VARIABLE TO MODIFY #############
 # $PSScriptRoot is where the scripts are
 # better using this one
@@ -69,6 +72,7 @@ else
 Try
 {
 # Verifying if new crypto extensions available #
+
 Invoke-WebRequest $url -OutFile $PSScriptRoot\extensions.txt -UseBasicParsing
 
 $dif = compare-object -referenceobject $(get-content "$PSScriptRoot\extensions.txt") -differenceobject $(get-content "$PSScriptRoot\extensions.old")
