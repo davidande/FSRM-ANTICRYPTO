@@ -1,5 +1,9 @@
+# This project is not followed anymore. if You want to use it, please refer to https://github.com/nexxai/CryptoBlocker
+
+
 # FSRM-ANTICRYPTO
 Protect servers against crypto attacks
+
 
 Use FSRM-ANTICRYPTO to protect your Windows files servers against Crypto attacks and keep the Crypto filegroup extensions up to date.
 A very complete list of extensions used by ransomwares is maintained by experiant.ca with infos gave by the community. Check-it at https://fsrm.experiant.ca.
