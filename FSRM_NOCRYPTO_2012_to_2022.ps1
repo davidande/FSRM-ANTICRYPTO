@@ -134,18 +134,11 @@ $Commande = New-FsrmAction -Type Command -Command "c:\Windows\System32\cmd.exe" 
    
 # Fonction to convert the extensions list #
 # in a compatible FSRM format             #                       
-
-function ConvertFrom-Json20([Object] $obj)
-{
-    Add-Type -AssemblyName System.Web.Extensions
-    $serializer = New-Object System.Web.Script.Serialization.JavaScriptSerializer
-    return ,$serializer.DeserializeObject($obj)
-}
+# Removed the Convert to JSON 20 Func to solve the issue blocking all files
 
 Try
 {
-$jsonStr = Invoke-WebRequest -Uri $url -UseBasicParsing
-$monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
+$monitoredExtensions = ((Invoke-WebRequest -Uri $url -ErrorAction Stop).Content | ConvertFrom-Json).filters
 }
 Catch
 {
