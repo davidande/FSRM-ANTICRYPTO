@@ -8,7 +8,7 @@ Configuring FSRM make impossible to users to write files with forbiden extension
 **Those scripts and how-to are given as is. Use at your own risck. I will take no responsability for that.**
 This work is heavily based on Kinomakino and @github.com/nexxai on Github. Big hug!
 Also Thanks to Jpelectron who gave me the idea to go further.
-Now list is maintained by others: https://raw.githubusercontent.com/DFFspace/CryptoBlocker/master/KnownExtensions.txt
+Now list is maintained by others: https://github.com/DFFspace
  
 # So What!
 - Update list of banned extensions (through task manager or manually)
