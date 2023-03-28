@@ -1,6 +1,3 @@
-# This project is not followed anymore. if You want to use it, please refer to https://github.com/nexxai/CryptoBlocker
-
-
 # FSRM-ANTICRYPTO
 Protect servers against crypto attacks
 
