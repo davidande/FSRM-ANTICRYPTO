@@ -31,8 +31,8 @@ if ($powershellVer -le 2)
 # $url is where to donwload extensionnlist from
 # don't change if You don't know what You are doing
 # updated cause not update anymore from experiant
-$url = "https://fsrm.experiant.ca/api/v1/get"
-# $url = "https://raw.githubusercontent.com/DFFspace/CryptoBlocker/master/KnownExtensions.txt"
+# $url = "https://fsrm.experiant.ca/api/v1/get"
+$url = "https://raw.githubusercontent.com/DFFspace/CryptoBlocker/master/KnownExtensions.txt"
 
 # Group Name in FSRM #
 $fileGroupName = "Crypto_Blocker_extensions"
@@ -73,7 +73,7 @@ Try
 {
 # Verifying if new crypto extensions available #
 
-Invoke-WebRequest $url -OutFile $PSScriptRoot\extensions.txt -UseBasicParsing
+Invoke-WebRequest $url -OutFile $PSScriptRoot\extensions.txt -UseBasicParsing -ContentType 'application/json; charset=UTF-8'
 
 $dif = compare-object -referenceobject $(get-content "$PSScriptRoot\extensions.txt") -differenceobject $(get-content "$PSScriptRoot\extensions.old")
 
@@ -144,7 +144,7 @@ function ConvertFrom-Json20([Object] $obj)
 
 Try
 {
-$jsonStr = Invoke-WebRequest -Uri $url -UseBasicParsing
+$jsonStr = Invoke-WebRequest $url -UseBasicParsing -ContentType 'application/json; charset=UTF-8'
 $monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
 }
 Catch
