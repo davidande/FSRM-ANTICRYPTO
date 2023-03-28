@@ -144,8 +144,7 @@ function ConvertFrom-Json20([Object] $obj)
 
 Try
 {
-$jsonStr = Invoke-WebRequest $url -UseBasicParsing -ContentType 'application/json; charset=UTF-8'
-$monitoredExtensions = @(ConvertFrom-Json20($jsonStr) | % { $_.filters })
+$monitoredExtensions = ((Invoke-WebRequest -Uri $url -ErrorAction Stop).Content | ConvertFrom-Json).filters
 }
 Catch
 {
