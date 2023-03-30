@@ -46,7 +46,7 @@ $fileScreenName = "Crypto_Blocker_Filter"
 $delpassive = "1"
 #############################################
 
-# First test that extensions.old is present and not empty ans online extensions list is reachable
+# First test that extensions.old is present and not empty and online extensions list is reachable
 If ((Test-Path "$PSScriptRoot\extensions.old") -eq $True) 
     {
         Write-Host "extensions.old founded"
@@ -112,7 +112,7 @@ $exclShares= Get-Content $PSScriptRoot\share_to_accept.txt | ForEach-Object { $_
 $monitoredShares = $drivesContainingShares | Where-Object { $exclShares -notcontains $_ }
 if (!$exclShares) {
 
-Write-Host "Shares bypassing filtering is empty"
+Write-Host "Shares bypassing filtering file is empty"
 
 }
 else {
